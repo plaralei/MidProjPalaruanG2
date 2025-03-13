@@ -19,7 +19,8 @@ public class AccountsMain extends BankAccounts{
             System.out.println("3. Deposit");
             System.out.println("4. Withdraw");
             System.out.println("5. Transfer Money");
-            System.out.println("6. Close Account");
+            System.out.println("6. Account Information");
+            System.out.println("7. Close Account");
             System.out.println("0. Exit");
             System.out.print("Enter your choice: ");
             choice = sc.nextInt();
@@ -117,6 +118,10 @@ public class AccountsMain extends BankAccounts{
                     }
                     break;
                 case 6:
+                    //
+                    break;
+
+                case 7:
                     System.out.print("Enter Account Number to Close: ");
                     accountNo = sc.nextInt();
                     acc = findAccount(bankAccounts, accountNo);
