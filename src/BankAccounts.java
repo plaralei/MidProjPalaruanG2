@@ -14,6 +14,8 @@ public class BankAccounts {
         this();
         this.accountNo = accountNo;
         this.accountName = accountName;
+        this.status = "active";
+        this.balance = 0;
     }
 
     // Getter and Setter methods

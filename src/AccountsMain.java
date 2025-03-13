@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class AccountsMain {
+public class AccountsMain extends BankAccounts{
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
@@ -9,6 +9,7 @@ public class AccountsMain {
         InvestmentAccount[] investmentAccounts = new InvestmentAccount[5];
         CheckingAccount[] checkingAccounts = new CheckingAccount[5];
         CreditCardAccount[] creditCardAccounts = new CreditCardAccount[5];
+        int accountCount = 0;
 
         // Menu options (implement logic for each)
         int choice = -1;
@@ -26,22 +27,104 @@ public class AccountsMain {
             // Add logic here for each menu option
             switch (choice) {
                 case 1:
-                    // Create accounts
+                    if (accountCount < bankAccounts.length) {
+                        System.out.println("Select Account Type: ");
+                        System.out.println("1. Checking");
+                        System.out.println("2. Credit Card");
+                        System.out.println("3. Investment");
+                        int type = sc.nextInt();
+                        System.out.print("Enter Account Number: ");
+                        int accountNo = sc.nextInt();
+                        sc.nextLine(); // Consume newline
+                        System.out.print("Enter Account Holder Name: ");
+                        String accountName = sc.nextLine();
+
+                        switch (type) {
+                            case 1:
+                                System.out.print("Enter Minimum Balance: ");
+                                double minBal = sc.nextDouble();
+                                bankAccounts[accountCount] = new CheckingAccount(accountNo, accountName, minBal);
+                                break;
+                            case 2:
+                                System.out.print("Enter Credit Limit: ");
+                                double creditLimit = sc.nextDouble();
+                                bankAccounts[accountCount] = new CreditCardAccount(accountNo, accountName, creditLimit, 0);
+                                break;
+                            case 3:
+                                System.out.print("Enter Minimum Balance: ");
+                                double minInvestment = sc.nextDouble();
+                                System.out.print("Enter Interest Rate: ");
+                                double interest = sc.nextDouble();
+                                bankAccounts[accountCount] = new InvestmentAccount(accountNo, accountName, minInvestment, interest);
+                                break;
+                            default:
+                                System.out.println("Invalid account type.");
+                                continue;
+                        }
+                        System.out.println("Account created successfully.");
+                        accountCount++;
+                    } else {
+                        System.out.println("Account limit reached.");
+                    }
                     break;
                 case 2:
-                    // Balance inquiry
+                    System.out.print("Enter Account Number: ");
+                    int accountNo = sc.nextInt();
+                    BankAccounts acc = findAccount(bankAccounts, accountNo);
+                    if (acc != null) {
+                        System.out.println("Balance: " + acc.inquireBalance());
+                    } else {
+                        System.out.println("Account not found.");
+                    }
                     break;
                 case 3:
-                    // Deposit
+                    System.out.print("Enter Account Number: ");
+                    accountNo = sc.nextInt();
+                    acc = findAccount(bankAccounts, accountNo);
+                    if (acc != null) {
+                        System.out.print("Enter Deposit Amount: ");
+                        double amount = sc.nextDouble();
+                        acc.deposit(amount);
+                    } else {
+                        System.out.println("Account not found.");
+                    }
                     break;
                 case 4:
-                    // Withdraw
+                    System.out.print("Enter Account Number: ");
+                    accountNo = sc.nextInt();
+                    acc = findAccount(bankAccounts, accountNo);
+                    if (acc != null) {
+                        System.out.print("Enter Withdrawal Amount: ");
+                        double amount = sc.nextDouble();
+                        acc.withdraw(amount);
+                    } else {
+                        System.out.println("Account not found.");
+                    }
                     break;
                 case 5:
-                    // Transfer money
+                    System.out.print("Enter Your Account Number: ");
+                    int fromAccNum = sc.nextInt();
+                    BankAccounts fromAcc = findAccount(bankAccounts, fromAccNum);
+                    System.out.print("Enter Target Account Number: ");
+                    int toAccNum = sc.nextInt();
+                    BankAccounts toAcc = findAccount(bankAccounts, toAccNum);
+                    if (fromAcc != null && toAcc != null) {
+                        System.out.print("Enter Transfer Amount: ");
+                        double amount = sc.nextDouble();
+                        fromAcc.transferMoney(toAcc, amount);
+                    } else {
+                        System.out.println("One or both accounts not found.");
+                    }
                     break;
                 case 6:
-                    // Close account
+                    System.out.print("Enter Account Number to Close: ");
+                    accountNo = sc.nextInt();
+                    acc = findAccount(bankAccounts, accountNo);
+                    if (acc != null) {
+                        acc.closeAccount();
+                    } else {
+                        System.out.println("Account not found.");
+                    }
                     break;
                 case 0:
                     System.out.println("Exiting...");
@@ -49,7 +132,16 @@ public class AccountsMain {
                 default:
                     System.out.println("Invalid choice.");
             }
+            }
+            sc.close();
         }
-        sc.close();
+
+        private static BankAccounts findAccount(BankAccounts[] accounts, int accountNo) {
+            for (BankAccounts account : accounts) {
+                if (account != null && account.getAccountNo() == accountNo) {
+                    return account;
+                }
+            }
+            return null;
     }
 }
