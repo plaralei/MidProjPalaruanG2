@@ -18,6 +18,10 @@ public class CheckingAccount extends BankAccounts {
 
     // Encash check method (withdraw equivalent)
     public void encashCheck(double amount) {
-        withdraw(amount);
+        if (inquireBalance() >= amount) {
+            withdraw(amount);
+        } else {
+            System.out.println("Insufficient balance for encashing check.");
+        }
     }
 }
