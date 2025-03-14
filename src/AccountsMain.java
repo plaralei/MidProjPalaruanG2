@@ -70,8 +70,8 @@ public class AccountsMain {
                     break;
                 case 2:
                     System.out.print("Enter Account Number: ");
-                    int accNum = sc.nextInt();
-                    BankAccounts acc = findAccount(bankAccounts, accNum);
+                    int accountNo = sc.nextInt();
+                    BankAccounts acc = findAccount(bankAccounts, accountNo);
                     if (acc instanceof InvestmentAccount) {
                         System.out.println("Investment Value (including interest): " + ((InvestmentAccount) acc).inquireInvestmentValue());
                     } else if (acc != null) {
@@ -82,8 +82,8 @@ public class AccountsMain {
                     break;
                 case 3:
                     System.out.print("Enter Account Number: ");
-                    accNum = sc.nextInt();
-                    acc = findAccount(bankAccounts, accNum);
+                    accountNo = sc.nextInt();
+                    acc = findAccount(bankAccounts, accountNo);
                     if (acc != null) {
                         System.out.print("Enter Deposit Amount: ");
                         double amount = sc.nextDouble();
@@ -94,8 +94,8 @@ public class AccountsMain {
                     break;
                 case 4:
                     System.out.print("Enter Account Number: ");
-                    accNum = sc.nextInt();
-                    acc = findAccount(bankAccounts, accNum);
+                    accountNo = sc.nextInt();
+                    acc = findAccount(bankAccounts, accountNo);
                     if (acc != null) {
                         System.out.print("Enter Withdrawal Amount: ");
                         double amount = sc.nextDouble();
@@ -121,8 +121,8 @@ public class AccountsMain {
                     break;
                 case 6:
                     System.out.print("Enter Account Number: ");
-                    accNum = sc.nextInt();
-                    acc = findAccount(bankAccounts, accNum);
+                    accountNo = sc.nextInt();
+                    acc = findAccount(bankAccounts, accountNo);
                     if (acc != null) {
                         System.out.println("Account Number: " + acc.getAccountNo());
                         System.out.println("Account Name: " + acc.getAccountName());
@@ -136,8 +136,8 @@ public class AccountsMain {
                     break;
                 case 7:
                     System.out.print("Enter Account Number to Close: ");
-                    accNum = sc.nextInt();
-                    acc = findAccount(bankAccounts, accNum);
+                    accountNo = sc.nextInt();
+                    acc = findAccount(bankAccounts, accountNo);
                     if (acc != null) {
                         if (acc instanceof InvestmentAccount) {
                             ((InvestmentAccount) acc).closeAccount();
