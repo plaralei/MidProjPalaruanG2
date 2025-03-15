@@ -26,8 +26,11 @@ public class CheckingAccount extends BankAccounts {
     }
 }
 
-public class InsufficientBalanceException extends Exception {
+class InsufficientBalanceException extends Exception {
     public InsufficientBalanceException(String message) {
         super(message);
     }
 }
+// need to implement getMinimumBalance()
+// implement CheckingAccount()
+// add implementation to other files
