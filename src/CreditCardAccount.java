@@ -16,6 +16,7 @@ public class CreditCardAccount extends BankAccounts {
     // Getter method for the credit limit
     public double getCreditLimit() {
         return creditLimit;
+
     }
 
     // Getter method for the current charges on the card
