@@ -30,13 +30,26 @@ public class AccountsMain {
                     case 1:
                         if (accountCount < bankAccounts.length) {
                             System.out.println("Select Account Type: ");
-                            int type;
+                            int type = -1;
+
+                            // Loop until the user enters a valid option
                             do {
-                                System.out.println("1. Checking");
-                                System.out.println("2. Credit Card");
-                                System.out.println("3. Investment");
-                                System.out.print("Enter a valid option (1-3): ");
-                                type = sc.nextInt();
+                                try {
+                                    System.out.println("1. Checking");
+                                    System.out.println("2. Credit Card");
+                                    System.out.println("3. Investment");
+                                    System.out.print("Enter a valid option (1-3): ");
+                                    type = sc.nextInt();
+
+
+                                    if (type < 1 || type > 3) {
+                                        System.out.println("Invalid option. Please enter a number between 1 and 3.");
+                                    }
+                                } catch (InputMismatchException e) {
+
+                                    System.out.println("Invalid input. Please enter a numeric value between 1 and 3.");
+                                    sc.nextLine();
+                                }
                             } while (type < 1 || type > 3);
                             System.out.print("Enter Account Number: ");
                             int accountNo = sc.nextInt();
