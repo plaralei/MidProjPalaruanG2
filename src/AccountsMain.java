@@ -139,6 +139,7 @@ public class AccountsMain {
                         }
                         break;
                     case 7:
+
                         System.out.print("Enter Account Number to Close: ");
                         accountNo = sc.nextInt();
                         acc = findAccount(bankAccounts, accountNo);
@@ -164,6 +165,7 @@ public class AccountsMain {
             } catch (Exception e) {
                 System.out.println("An unexpected error occurred: " + e.getMessage());
                 // I worked
+                // Gumagana ba
             }
         }
         sc.close();
