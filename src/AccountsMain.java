@@ -163,6 +163,7 @@ public class AccountsMain {
                 sc.nextLine(); // consume the invalid input
             } catch (Exception e) {
                 System.out.println("An unexpected error occurred: " + e.getMessage());
+                // I worked
             }
         }
         sc.close();
