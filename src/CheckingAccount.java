@@ -3,7 +3,7 @@
  */
 
 public class CheckingAccount extends BankAccounts {
-    private double minimumBalance;
+    public double minimumBalance;
     
     public CheckingAccount(int accountNo, String accountName, double minimumBalance) {
         super(accountNo, accountName);
@@ -26,7 +26,7 @@ public class CheckingAccount extends BankAccounts {
     }
 }
 
-public class InsufficientBalanceException extends Exception {
+class InsufficientBalanceException extends Exception {
     public InsufficientBalanceException(String message) {
         super(message);
     }
