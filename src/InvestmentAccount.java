@@ -5,6 +5,8 @@ public class InvestmentAccount extends BankAccounts {
     // Constructors
     public InvestmentAccount() {
         super();
+        this.minimumBalance = 0;
+        this.interest = 0;
     }
 
     public InvestmentAccount(int accountNo, String accountName, double minimumBalance, double interest) {
@@ -24,20 +26,33 @@ public class InvestmentAccount extends BankAccounts {
 
     // Add investment (acts like a deposit)
     public void addInvestment(double amount) {
-        deposit(amount);
+        if (amount > 0) {
+            deposit(amount);
+        } else {
+            System.out.println("Invalid investment amount.");
+        }
     }
 
     // Inquire investment value (balance + interest)
     public double inquireInvestmentValue() {
-        return balance * (1 + interest);
+        if (balance > 0) {
+            return balance * (1 + interest);
+        } else {
+            System.out.println("No balance in account.");
+            return 0;
+        }
     }
 
     // Override close account (withdraw full amount with interest)
     @Override
     public void closeAccount() {
-        double totalBalance = inquireInvestmentValue();
-        balance = 0;
-        System.out.println("Account closed. Final balance (with interest): " + totalBalance);
-        super.closeAccount();
+        if (balance > 0) {
+            double totalBalance = inquireInvestmentValue();
+            balance = 0;
+            System.out.println("Account closed. Final balance (with interest): " + totalBalance);
+            super.closeAccount();
+        } else {
+            System.out.println("Account already empty.");
+        }
     }
 }

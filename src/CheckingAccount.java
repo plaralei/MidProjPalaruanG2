@@ -1,28 +1,33 @@
-import org.w3c.dom.ls.LSOutput;
+/*
+2 members
+ */
 
 public class CheckingAccount extends BankAccounts {
-    private double minimumBalance;
-
-    // Constructors
-    public CheckingAccount() {
-        super();
-    }
-
+    public double minimumBalance;
+    
     public CheckingAccount(int accountNo, String accountName, double minimumBalance) {
         super(accountNo, accountName);
+        if (minimumBalance < 0) {
+            throw new IllegalArgumentException("Minimum balance cannot be negative");
+        }
         this.minimumBalance = minimumBalance;
     }
-
-    // Get minimum balance
-    public double getMinimumBalance() {
-        return minimumBalance;
+    
+    public void encashCheck(double amount) throws InsufficientBalanceException {
+        if (inquireBalance() - amount < minimumBalance) {
+            throw new InsufficientBalanceException("Cannot encash check: Balance would fall below minimum requirement");
+        }
+        super.withdraw(amount);
     }
-
-    // Encash check method (withdraw and encash are not synonymous)
-    // machines are not used to validate encashed checks and the amount is not withdrawn from the account
-    public void encashCheck(double amount) {
-        //withdraw(amount);
-        System.out.println("Please see a teller to encash check of " +amount+ ". You may also deposit the check to an account but cash withdrawal after deposit is not allowed.");
+    
+    @Override
+    public void withdraw(double amount) {
+        throw new UnsupportedOperationException("Direct withdrawals are not allowed for checking accounts.");
     }
+}
 
+class InsufficientBalanceException extends Exception {
+    public InsufficientBalanceException(String message) {
+        super(message);
+    }
 }
