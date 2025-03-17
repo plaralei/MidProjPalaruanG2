@@ -32,7 +32,6 @@ public class AccountsMain {
                             System.out.println("Select Account Type: ");
                             int type = -1;
 
-                            // Loop until the user enters a valid option
                             do {
                                 try {
                                     System.out.println("1. Checking");
