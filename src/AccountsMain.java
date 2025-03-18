@@ -57,7 +57,7 @@ public class AccountsMain {
                             System.out.print("Enter Account Holder Name: ");
                             String accountName = sc.nextLine();
 
-                            switch (type) {
+                            switch (type) { // Tapos na ba Case 1 and 2? para lagyan ko na ng Try Catch
 //                            case 1:
 //                                System.out.print("Enter Minimum Balance: ");
 //                                double minBal = sc.nextDouble();
