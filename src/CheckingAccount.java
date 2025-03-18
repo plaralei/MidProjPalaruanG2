@@ -4,7 +4,7 @@
 
 /**
  * The CheckingAccount class holds the methods to get the account's minimum balance or to encash a check
- *This class allows the user the options on what to do with a checking account
+ * This class allows the user the options on what to do with a checking account
  *
  *
  * @version 1.0
@@ -14,11 +14,11 @@ public class CheckingAccount extends BankAccounts {
     public double minimumBalance;
 
     /**
-     * Checks the minimum balance of the account
+     * Instance variables are assigned to their repective constructors
      *
-     * @param accountNo Ensures that the account number aligns with that of a created account
-     * @param accountName Ensures that the account name aligns with that of a created account
-     * @param minimumBalance Ensures that the account number aligns with that of a created account
+     * @param accountNo 9-digit number that is connected to an account
+     * @param accountName name that is connected to the account
+     * @param minimumBalance the assigned minimum balance of the given account
      *
      */
     public CheckingAccount(int accountNo, String accountName, double minimumBalance) {
@@ -29,15 +29,20 @@ public class CheckingAccount extends BankAccounts {
         this.minimumBalance = minimumBalance;
     }
 
+    /**
+     * Shows the minimum balance of an accessed account
+     *
+     * @return minimumBalance
+     */
     public double getMinimumBalance() {
         return minimumBalance;
     }
 
     /**
-     *Allow the user to encash a check/ exchange a written check for cash
+     *Encashes a check/exchanges a written check for cash
      *
      * @param amount The amount on the check
-     * @throws InsufficientBalanceException if the balance falls below the minimum balance
+     * @throws InsufficientBalanceException if the balance falls below the minimum balance after encashment
      */
     public void encashCheck(double amount) throws InsufficientBalanceException {
         if (inquireBalance() - amount < minimumBalance) {
@@ -45,7 +50,13 @@ public class CheckingAccount extends BankAccounts {
         }
         super.withdraw(amount);
     }
-    
+
+    /**
+     * Overrides withdraw
+     * Withdrawal not allowed
+     * @param amount the amount on the check/ to be encashed
+     *
+     */
     @Override
     public void withdraw(double amount) {
         throw new UnsupportedOperationException("Direct withdrawals are not allowed for checking accounts.");
