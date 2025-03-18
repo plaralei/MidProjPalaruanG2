@@ -2,7 +2,7 @@ public class BankAccounts {
     private int accountNo;          // 9-digit account number
     private String accountName;
     protected double balance;       // protected so it can be accessed in subclasses
-    private String status;          // "active" or "closed"
+    protected String status;          // "active" or "closed"
 
     // Constructors
     public BankAccounts() {

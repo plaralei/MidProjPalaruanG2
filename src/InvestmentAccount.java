@@ -1,6 +1,6 @@
 public class InvestmentAccount extends BankAccounts {
     private double minimumBalance;
-    private double interest;
+    private double interest; // Example: 0.10 for 10%
 
     // Constructors
     public InvestmentAccount() {
@@ -12,7 +12,7 @@ public class InvestmentAccount extends BankAccounts {
     public InvestmentAccount(int accountNo, String accountName, double minimumBalance, double interest) {
         super(accountNo, accountName);
         this.minimumBalance = minimumBalance;
-        this.interest = interest;
+        setInterest(interest); // Use setter to validate interest
     }
 
     // Getters
@@ -22,6 +22,15 @@ public class InvestmentAccount extends BankAccounts {
 
     public double getInterest() {
         return interest;
+    }
+
+    // Setter for interest to validate it
+    public void setInterest(double interest) {
+        if (interest >= 0 && interest <= 1) {
+            this.interest = interest;
+        } else {
+            throw new IllegalArgumentException("Interest must be between 0 and 1.");
+        }
     }
 
     // Add investment (acts like a deposit)
@@ -35,12 +44,7 @@ public class InvestmentAccount extends BankAccounts {
 
     // Inquire investment value (balance + interest)
     public double inquireInvestmentValue() {
-        if (balance > 0) {
-            return balance * (1 + interest);
-        } else {
-            System.out.println("No balance in account.");
-            return 0;
-        }
+        return balance * (1 + interest);
     }
 
     // Override close account (withdraw full amount with interest)
@@ -48,9 +52,9 @@ public class InvestmentAccount extends BankAccounts {
     public void closeAccount() {
         if (balance > 0) {
             double totalBalance = inquireInvestmentValue();
-            balance = 0;
+            balance = 0; // Set balance to 0 after withdrawal
+            status = "closed"; // Set status to closed
             System.out.println("Account closed. Final balance (with interest): " + totalBalance);
-            super.closeAccount();
         } else {
             System.out.println("Account already empty.");
         }
