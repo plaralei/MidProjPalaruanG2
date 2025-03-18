@@ -34,7 +34,7 @@ public class CheckingAccount extends BankAccounts {
     }
 
     /**
-     *Allows the user to encash a check/ exchange a written check for cash
+     *Allow the user to encash a check/ exchange a written check for cash
      *
      * @param amount The amount on the check
      * @throws InsufficientBalanceException if the balance falls below the minimum balance
