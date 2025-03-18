@@ -50,6 +50,7 @@ public class AccountsMain {
                                     sc.nextLine();
                                 }
                             } while (type < 1 || type > 3);
+
                             System.out.print("Enter Account Number: ");
                             int accountNo = sc.nextInt();
                             sc.nextLine();
@@ -68,12 +69,22 @@ public class AccountsMain {
 //                                bankAccounts[accountCount] = new CreditCardAccount(accountNo, accountName, creditLimit, 0);
 //                                break;
                                 case 3:
-                                    System.out.print("Enter Minimum Balance: ");
-                                    double minInvestment = sc.nextDouble();
-                                    System.out.print("Enter Interest Rate: ");
-                                    double interest = sc.nextDouble();
-                                    bankAccounts[accountCount] = new InvestmentAccount(accountNo, accountName, minInvestment, interest);
+                                    boolean validInput = false;
+                                    while (!validInput) {
+                                        try {
+                                            System.out.print("Enter Minimum Balance: ");
+                                            double minInvestment = sc.nextDouble();
+                                            System.out.print("Enter Interest Rate: ");
+                                            double interest = sc.nextDouble();
+                                            bankAccounts[accountCount] = new InvestmentAccount(accountNo, accountName, minInvestment, interest);
+                                            validInput = true;
+                                        } catch (InputMismatchException e) {
+                                            System.out.println("Invalid Input! Please enter valid numbers for Minimum Balance and Interest Rate.");
+                                            sc.nextDouble();
+                                        }
+                                    }
                                     break;
+
                                 default:
                                     System.out.println("Invalid account type.");
                                     continue;
@@ -85,9 +96,12 @@ public class AccountsMain {
                         }
                         break;
                     case 2:
+
                         System.out.print("Enter Account Number: ");
                         int accountNo = sc.nextInt();
+
                         BankAccounts acc = findAccount(bankAccounts, accountNo);
+
                         if (acc instanceof InvestmentAccount) {
                             System.out.println("Investment Value (including interest): " + ((InvestmentAccount) acc).inquireInvestmentValue());
                         } else if (acc != null) {
@@ -95,6 +109,8 @@ public class AccountsMain {
                         } else {
                             System.out.println("Account not found.");
                         }
+
+
                         break;
                     case 3:
                         System.out.print("Enter Account Number: ");
@@ -173,7 +189,7 @@ public class AccountsMain {
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Please enter a valid number.");
-                sc.nextLine(); // consume the invalid input
+                sc.nextLine();
             } catch (Exception e) {
                 System.out.println("An unexpected error occurred: " + e.getMessage());
                 // I worked
