@@ -72,13 +72,20 @@ public class AccountsMain {
                                         }
                                     }
                                     break;
-
                                 case 2:
-                                    System.out.print("Enter Credit Limit: ");
-                                    double creditLimit = sc.nextDouble();
-                                    bankAccounts[accountCount] = new CreditCardAccount(accountNo, accountName, creditLimit, 0);
+                                    boolean validCaseTwo = false;
+                                    while (!validCaseTwo) {
+                                        try {
+                                            System.out.print("Enter Credit Limit: ");
+                                            double creditLimit = sc.nextDouble();
+                                            bankAccounts[accountCount] = new CreditCardAccount(accountNo, accountName, creditLimit, 0);
+                                            validCaseTwo = true;
+                                        } catch (InputMismatchException e) {
+                                            System.out.println("Invalid Input! Please enter valid numbers.");
+                                            sc.nextLine();
+                                        }
+                                    }
                                     break;
-
                                 case 3:
                                     boolean validCaseThree = false;
                                     while (!validCaseThree) {
