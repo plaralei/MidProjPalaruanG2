@@ -6,7 +6,7 @@
  * The CheckingAccount class holds the methods to get the account's minimum balance or to encash a check
  *This class allows the user the options on what to do with a checking account
  *
- * @bsok/organ-elle
+ *
  * @version 1.0
  */
 
