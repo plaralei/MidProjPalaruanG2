@@ -70,7 +70,7 @@ public class AccountsMain {
 //                                break;
                                 case 3:
                                     boolean validInput = false;
-                                    while(!validInput) {
+                                    while (!validInput) {
                                         try {
                                             System.out.print("Enter Minimum Balance: ");
                                             double minInvestment = sc.nextDouble();
@@ -80,7 +80,7 @@ public class AccountsMain {
                                             validInput = true;
                                         } catch (InputMismatchException e) {
                                             System.out.println("Invalid Input! Please enter valid numbers for Minimum Balance and Interest Rate.");
-                                            sc.nextLine();
+                                            sc.nextDouble();
                                         }
                                     }
                                     break;
@@ -96,9 +96,12 @@ public class AccountsMain {
                         }
                         break;
                     case 2:
+
                         System.out.print("Enter Account Number: ");
                         int accountNo = sc.nextInt();
+
                         BankAccounts acc = findAccount(bankAccounts, accountNo);
+
                         if (acc instanceof InvestmentAccount) {
                             System.out.println("Investment Value (including interest): " + ((InvestmentAccount) acc).inquireInvestmentValue());
                         } else if (acc != null) {
@@ -106,6 +109,8 @@ public class AccountsMain {
                         } else {
                             System.out.println("Account not found.");
                         }
+
+
                         break;
                     case 3:
                         System.out.print("Enter Account Number: ");
