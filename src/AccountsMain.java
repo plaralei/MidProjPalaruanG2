@@ -12,6 +12,7 @@ public class AccountsMain {
         // Menu options
         int choice = -1;
         while (choice != 0) {
+            System.out.println("\nMenu:");
             System.out.println("1. Create Bank Account");
             System.out.println("2. Balance Inquiry");
             System.out.println("3. Deposit");
@@ -21,7 +22,6 @@ public class AccountsMain {
             System.out.println("7. Close Account");
             System.out.println("0. Exit");
             System.out.print("Enter your choice: ");
-
 
             try {
                 choice = sc.nextInt();
@@ -34,40 +34,39 @@ public class AccountsMain {
 
                             do {
                                 try {
-                                    System.out.println("1. Checking");
-                                    System.out.println("2. Credit Card");
-                                    System.out.println("3. Investment");
+                                    System.out.println("1. Checking Account");
+                                    System.out.println("2. Credit Card Account");
+                                    System.out.println("3. Investment Account");
                                     System.out.print("Enter a valid option (1-3): ");
                                     type = sc.nextInt();
-
 
                                     if (type < 1 || type > 3) {
                                         System.out.println("Invalid option. Please enter a number between 1 and 3.");
                                     }
                                 } catch (InputMismatchException e) {
-
                                     System.out.println("Invalid input. Please enter a numeric value between 1 and 3.");
-                                    sc.nextLine();
+                                    sc.nextLine(); // clear invalid input
                                 }
                             } while (type < 1 || type > 3);
+
                             System.out.print("Enter Account Number: ");
                             int accountNo = sc.nextInt();
-                            sc.nextLine();
+                            sc.nextLine(); // consume the newline character
                             System.out.print("Enter Account Holder Name: ");
                             String accountName = sc.nextLine();
 
                             switch (type) {
-//                            case 1:
-//                                System.out.print("Enter Minimum Balance: ");
-//                                double minBal = sc.nextDouble();
-//                                bankAccounts[accountCount] = new CheckingAccount(accountNo, accountName, minBal);
-//                                break;
-//                            case 2:
-//                                System.out.print("Enter Credit Limit: ");
-//                                double creditLimit = sc.nextDouble();
-//                                bankAccounts[accountCount] = new CreditCardAccount(accountNo, accountName, creditLimit, 0);
-//                                break;
-                                case 3:
+                                case 1: // Checking Account
+                                    System.out.print("Enter Minimum Balance: ");
+                                    double minBal = sc.nextDouble();
+                                    bankAccounts[accountCount] = new CheckingAccount(accountNo, accountName, minBal);
+                                    break;
+                                case 2: // Credit Card Account
+                                    System.out.print("Enter Credit Limit: ");
+                                    double creditLimit = sc.nextDouble();
+                                    bankAccounts[accountCount] = new CreditCardAccount(accountNo, accountName, creditLimit, 0);
+                                    break;
+                                case 3: // Investment Account
                                     System.out.print("Enter Minimum Balance: ");
                                     double minInvestment = sc.nextDouble();
                                     System.out.print("Enter Interest Rate: ");
@@ -84,7 +83,7 @@ public class AccountsMain {
                             System.out.println("Account limit reached.");
                         }
                         break;
-                    case 2:
+                    case 2: // Balance Inquiry
                         System.out.print("Enter Account Number: ");
                         int accountNo = sc.nextInt();
                         BankAccounts acc = findAccount(bankAccounts, accountNo);
@@ -96,7 +95,7 @@ public class AccountsMain {
                             System.out.println("Account not found.");
                         }
                         break;
-                    case 3:
+                    case 3: // Deposit
                         System.out.print("Enter Account Number: ");
                         accountNo = sc.nextInt();
                         acc = findAccount(bankAccounts, accountNo);
@@ -104,23 +103,31 @@ public class AccountsMain {
                             System.out.print("Enter Deposit Amount: ");
                             double amount = sc.nextDouble();
                             acc.deposit(amount);
+                            System.out.println("Deposit successful.");
                         } else {
                             System.out.println("Account not found.");
                         }
                         break;
-                    case 4:
+                    case 4: // Withdraw
                         System.out.print("Enter Account Number: ");
                         accountNo = sc.nextInt();
                         acc = findAccount(bankAccounts, accountNo);
                         if (acc != null) {
-                            System.out.print("Enter Withdrawal Amount: ");
-                            double amount = sc.nextDouble();
-                            acc.withdraw(amount);
+                            try {
+                                System.out.print("Enter Withdrawal Amount: ");
+                                double amount = sc.nextDouble();
+                                acc.withdraw(amount);
+                                System.out.println("Withdrawal successful.");
+                            } catch (UnsupportedOperationException e) {
+                                System.out.println("Error: " + e.getMessage());
+                            } catch (Exception e) {
+                                System.out.println("An error occurred: " + e.getMessage());
+                            }
                         } else {
                             System.out.println("Account not found.");
                         }
                         break;
-                    case 5:
+                    case 5: // Transfer Money
                         System.out.print("Enter Your Account Number: ");
                         int fromAccNum = sc.nextInt();
                         BankAccounts fromAcc = findAccount(bankAccounts, fromAccNum);
@@ -130,12 +137,17 @@ public class AccountsMain {
                         if (fromAcc != null && toAcc != null) {
                             System.out.print("Enter Transfer Amount: ");
                             double amount = sc.nextDouble();
-                            fromAcc.transferMoney(toAcc, amount);
+                            try {
+                                fromAcc.transferMoney(toAcc, amount);
+                                System.out.println("Transfer successful.");
+                            } catch (Exception e) {
+                                System.out.println("Transfer failed: " + e.getMessage());
+                            }
                         } else {
                             System.out.println("One or both accounts not found.");
                         }
                         break;
-                    case 6:
+                    case 6: // Account Information
                         System.out.print("Enter Account Number: ");
                         accountNo = sc.nextInt();
                         acc = findAccount(bankAccounts, accountNo);
@@ -150,22 +162,18 @@ public class AccountsMain {
                             System.out.println("Account not found.");
                         }
                         break;
-                    case 7:
-
+                    case 7: // Close Account
                         System.out.print("Enter Account Number to Close: ");
                         accountNo = sc.nextInt();
                         acc = findAccount(bankAccounts, accountNo);
                         if (acc != null) {
-                            if (acc instanceof InvestmentAccount) {
-                                ((InvestmentAccount) acc).closeAccount();
-                            } else {
-                                acc.closeAccount();
-                            }
+                            acc.closeAccount();
+                            System.out.println("Account closed successfully.");
                         } else {
                             System.out.println("Account not found.");
                         }
                         break;
-                    case 0:
+                    case 0: // Exit
                         System.out.println("Exiting...");
                         break;
                     default:
@@ -173,11 +181,9 @@ public class AccountsMain {
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Please enter a valid number.");
-                sc.nextLine(); // consume the invalid input
+                sc.nextLine(); // consume invalid input
             } catch (Exception e) {
                 System.out.println("An unexpected error occurred: " + e.getMessage());
-                // I worked
-                // Gumagana ba
             }
         }
         sc.close();

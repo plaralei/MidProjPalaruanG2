@@ -29,16 +29,20 @@ public class InvestmentAccount extends BankAccounts {
         if (interest >= 0 && interest <= 1) {
             this.interest = interest;
         } else {
-            throw new IllegalArgumentException("Interest must be between 0 and 1.");
+            throw new IllegalArgumentException("Interest must be between 0 and 1 (e.g., 10% should be 0.10).");
         }
     }
 
     // Add investment (acts like a deposit)
     public void addInvestment(double amount) {
-        if (amount > 0) {
-            deposit(amount);
-        } else {
-            System.out.println("Invalid investment amount.");
+        try {
+            if (amount > 0) {
+                deposit(amount); // Use deposit method from the parent class
+            } else {
+                throw new IllegalArgumentException("Invalid investment amount. Amount must be positive.");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -50,13 +54,17 @@ public class InvestmentAccount extends BankAccounts {
     // Override close account (withdraw full amount with interest)
     @Override
     public void closeAccount() {
-        if (balance > 0) {
-            double totalBalance = inquireInvestmentValue();
-            balance = 0; // Set balance to 0 after withdrawal
-            status = "closed"; // Set status to closed
-            System.out.println("Account closed. Final balance (with interest): " + totalBalance);
-        } else {
-            System.out.println("Account already empty.");
+        try {
+            if (balance >= minimumBalance) {
+                double totalBalance = inquireInvestmentValue();
+                balance = 0; // Reset balance to zero
+                status = "closed"; // Mark the account as closed
+                System.out.println("Account closed. Final balance (with interest): " + totalBalance);
+            } else {
+                throw new IllegalStateException("Cannot close account. Balance is below the minimum required balance.");
+            }
+        } catch (IllegalStateException e) {
+            System.out.println(e.getMessage());
         }
     }
 }

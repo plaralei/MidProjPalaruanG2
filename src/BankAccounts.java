@@ -2,7 +2,7 @@ public class BankAccounts {
     private int accountNo;          // 9-digit account number
     private String accountName;
     protected double balance;       // protected so it can be accessed in subclasses
-    protected String status;          // "active" or "closed"
+    protected String status;        // "active" or "closed"
 
     // Constructors
     public BankAccounts() {
@@ -11,7 +11,7 @@ public class BankAccounts {
     }
 
     public BankAccounts(int accountNo, String accountName) {
-        this();
+        this(); // Call default constructor
         if (String.valueOf(accountNo).length() == 9) {
             this.accountNo = accountNo;
         } else {
@@ -42,26 +42,42 @@ public class BankAccounts {
     }
 
     public void setAccountName(String accountName) {
-        this.accountName = accountName;
-    }
-
-    // Deposit method
-    public void deposit(double amount) {
-        if (amount > 0) {
-            balance += amount;
-            System.out.println("Deposit successful. New balance: " + balance);
+        if (accountName != null && !accountName.isEmpty()) {
+            this.accountName = accountName;
         } else {
-            System.out.println("Invalid deposit amount.");
+            throw new IllegalArgumentException("Account name cannot be null or empty.");
         }
     }
 
-    // Withdraw method
+    // Deposit method with exception handling
+    public void deposit(double amount) {
+        try {
+            if (amount > 0) {
+                balance += amount;
+                System.out.println("Deposit successful. New balance: " + balance);
+            } else {
+                throw new IllegalArgumentException("Invalid deposit amount. Amount must be positive.");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    // Withdraw method with exception handling
     public void withdraw(double amount) {
-        if (balance >= amount) {
-            balance -= amount;
-            System.out.println("Withdrawal successful. New balance: " + balance);
-        } else {
-            System.out.println("Insufficient balance.");
+        try {
+            if (balance >= amount) {
+                if (amount > 0) {
+                    balance -= amount;
+                    System.out.println("Withdrawal successful. New balance: " + balance);
+                } else {
+                    throw new IllegalArgumentException("Amount must be positive.");
+                }
+            } else {
+                throw new IllegalStateException("Insufficient balance.");
+            }
+        } catch (IllegalStateException | IllegalArgumentException e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -70,28 +86,39 @@ public class BankAccounts {
         return balance;
     }
 
-    // Close account
+    // Close account with exception handling
     public void closeAccount() {
-        if (balance == 0) {
-            status = "closed";
-            System.out.println("Account closed.");
-        } else {
-            System.out.println("Withdraw all money before closing the account.");
+        try {
+            if (balance == 0) {
+                status = "closed";
+                System.out.println("Account closed.");
+            } else {
+                throw new IllegalStateException("Withdraw all money before closing the account.");
+            }
+        } catch (IllegalStateException e) {
+            System.out.println(e.getMessage());
         }
     }
 
-    // Transfer money
+    // Transfer money with exception handling
     public void transferMoney(BankAccounts targetAccount, double amount) {
-        if (targetAccount == null) {
-            System.out.println("Target account does not exist.");
-            return;
-        }
-        if (balance >= amount) {
-            withdraw(amount);
-            targetAccount.deposit(amount);
-            System.out.println("Transfer successful.");
-        } else {
-            System.out.println("Insufficient balance for transfer.");
+        try {
+            if (targetAccount == null) {
+                throw new IllegalArgumentException("Target account does not exist.");
+            }
+            if (balance >= amount) {
+                if (amount > 0) {
+                    withdraw(amount);
+                    targetAccount.deposit(amount);
+                    System.out.println("Transfer successful.");
+                } else {
+                    throw new IllegalArgumentException("Amount must be positive.");
+                }
+            } else {
+                throw new IllegalStateException("Insufficient balance for transfer.");
+            }
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            System.out.println(e.getMessage());
         }
     }
 
