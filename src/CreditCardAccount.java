@@ -1,3 +1,5 @@
+import java.sql.SQLOutput;
+
 public class CreditCardAccount extends BankAccounts {
 
     private double creditLimit;  // Credit limit for the card
@@ -43,14 +45,15 @@ public class CreditCardAccount extends BankAccounts {
     }
 
     // Method to charge an amount to the card, if there's enough available credit
+
     public void chargeToCard(double amount) {
-        double availableCredit = creditLimit - charges;  // Calculate available credit
+        double availableCredit = creditLimit - charges; // Calculate available credit
 
         if (availableCredit >= amount) {
-            charges += amount;  // Add the amount to charges if there's enough available credit
-            System.out.println("Charge successful. New charges: " + charges);
+            charges += amount; // Add amount to charges if there's enough available credit
+            System.out.println("Charge successful. Remaining charges: " + charges);
         } else {
-            System.out.println("Insufficient available credit to charge this amount."); // Notify if insufficient credit
+            System.out.println("Insufficient credit to charge this amount."); // Notify if insufficient credit
         }
     }
 
