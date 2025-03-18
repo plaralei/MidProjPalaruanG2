@@ -85,7 +85,7 @@ public class AccountsMain {
                         }
                         break;
                     case 2:
-                        System.out.print("Enter 9-digit Account Number: ");
+                        System.out.print("Enter Account Number: ");
                         int accountNo = sc.nextInt();
                         BankAccounts acc = findAccount(bankAccounts, accountNo);
                         if (acc instanceof InvestmentAccount) {

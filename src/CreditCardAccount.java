@@ -7,16 +7,13 @@ public class CreditCardAccount extends BankAccounts {
 
     // Constructor to initialize the credit card account with given details
     public CreditCardAccount(int accountNo, String accountName, double creditLimit, double charges) {
-
         this.creditLimit = creditLimit;
         this.charges = charges;
-
     }
 
     // Getter method for the credit limit
     public double getCreditLimit() {
         return creditLimit;
-
     }
 
     // Getter method for the current charges on the card
@@ -24,34 +21,26 @@ public class CreditCardAccount extends BankAccounts {
         return charges;
     }
 
+
     // Method to make a payment towards the card, reducing the charges
     public void payCard(double amount) {
-
         if (amount > 0) {  // Payment amount must be positive
             if (amount <= charges) {
-
                 charges -= amount;  // Deduct the payment from the outstanding charges
                 System.out.println("Payment successful. Remaining charges: " + charges);
-
             } else {
-
                 charges = 0;  // If payment exceeds charges, clear the charges
                 System.out.println("Payment exceeded the charges. Charges cleared.");
-
             }
         } else {
-
             System.out.println("Invalid payment amount. Payment should be positive.");
-
         }
     }
 
     // Method to inquire about the available credit (credit limit - charges)
     public void inquireAvailableCredit() {
-
         double availableCredit = creditLimit - charges;  // Available credit is the credit limit minus current charges
         System.out.println("Available Credit: " + availableCredit);
-
     }
 
     // Method to charge an amount to the card, if there's enough available credit
@@ -59,14 +48,10 @@ public class CreditCardAccount extends BankAccounts {
         double availableCredit = creditLimit - charges;  // Calculate available credit
 
         if (availableCredit >= amount) {
-
             charges += amount;  // Add the amount to charges if there's enough available credit
             System.out.println("Charge successful. New charges: " + charges);
-
         } else {
-
             System.out.println("Insufficient available credit to charge this amount."); // Notify if insufficient credit
-
         }
     }
 
@@ -80,9 +65,7 @@ public class CreditCardAccount extends BankAccounts {
             System.out.println("Cash advance successful. New charges: " + charges);
 
         } else {
-
             System.out.println("Cash advance exceeds 50% of available credit. Transaction declined.");  // Reject if too large
-
         }
     }
 }
