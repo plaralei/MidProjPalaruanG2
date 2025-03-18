@@ -21,7 +21,6 @@ public class CreditCardAccount extends BankAccounts {
         return charges;
     }
 
-
     // Method to make a payment towards the card, reducing the charges
     public void payCard(double amount) {
         if (amount > 0) {  // Payment amount must be positive
@@ -39,8 +38,8 @@ public class CreditCardAccount extends BankAccounts {
 
     // Method to inquire about the available credit (credit limit - charges)
     public void inquireAvailableCredit() {
-        double availableCredit = creditLimit - charges;  // Available credit is the credit limit minus current charges
-        System.out.println("Available Credit: " + availableCredit);
+        double availableCredit = creditLimit - charges; // Available credit is the credit limit minus current charges.
+        System.out.println("Available credit: " + availableCredit);
     }
 
     // Method to charge an amount to the card, if there's enough available credit
