@@ -12,7 +12,11 @@ public class BankAccounts {
 
     public BankAccounts(int accountNo, String accountName) {
         this();
-        this.accountNo = accountNo;
+        if (String.valueOf(accountNo).length() == 9) {
+            this.accountNo = accountNo;
+        } else {
+            throw new IllegalArgumentException("Account number must be 9 digits.");
+        }
         this.accountName = accountName;
     }
 
@@ -30,7 +34,11 @@ public class BankAccounts {
     }
 
     public void setAccountNo(int accountNo) {
-        this.accountNo = accountNo;
+        if (String.valueOf(accountNo).length() == 9) {
+            this.accountNo = accountNo;
+        } else {
+            throw new IllegalArgumentException("Account number must be 9 digits.");
+        }
     }
 
     public void setAccountName(String accountName) {
@@ -74,6 +82,10 @@ public class BankAccounts {
 
     // Transfer money
     public void transferMoney(BankAccounts targetAccount, double amount) {
+        if (targetAccount == null) {
+            System.out.println("Target account does not exist.");
+            return;
+        }
         if (balance >= amount) {
             withdraw(amount);
             targetAccount.deposit(amount);

@@ -10,6 +10,7 @@
  * @version 1.0
  */
 
+
 public class CheckingAccount extends BankAccounts {
     public double minimumBalance;
 
