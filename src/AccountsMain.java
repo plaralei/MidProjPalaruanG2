@@ -80,8 +80,7 @@ public class AccountsMain {
                             } while (type < 1 || type > 3);
 
                             int accountNo = readAccountNo();
-                            System.out.print("Enter Account Holder Name: ");
-                            String accountName = sc.nextLine();
+                            String accountName = readAccountName();
 
                             switch (type) {
                                 case 1:
@@ -304,5 +303,26 @@ public class AccountsMain {
             }
         }
         return accountNo;
+    }
+
+    // Method to read account name input
+    public static String readAccountName() {
+        Scanner sc = new Scanner(System.in);
+        boolean validName = false;
+        String accountName = "";
+
+        while (!validName) {
+            try {
+                System.out.print("Enter Account Holder Name: ");
+                accountName = sc.nextLine();
+                Integer.parseInt(accountName);
+                System.out.println("Invalid input! Please enter string only.");
+            } catch (NumberFormatException e) {
+                validName = true;
+            } catch (Exception e) {
+                System.out.println("An unexpected error occurred.");
+            }
+        }
+        return accountName;
     }
 }
