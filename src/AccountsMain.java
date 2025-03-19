@@ -58,28 +58,47 @@ public class AccountsMain {
                             String accountName = sc.nextLine();
 
                             switch (type) {
-//                            case 1:
-//                                System.out.print("Enter Minimum Balance: ");
-//                                double minBal = sc.nextDouble();
-//                                bankAccounts[accountCount] = new CheckingAccount(accountNo, accountName, minBal);
-//                                break;
-//                            case 2:
-//                                System.out.print("Enter Credit Limit: ");
-//                                double creditLimit = sc.nextDouble();
-//                                bankAccounts[accountCount] = new CreditCardAccount(accountNo, accountName, creditLimit, 0);
-//                                break;
+                            case 1:
+                                boolean validCaseOne = false;
+                                while (!validCaseOne) {
+                                    try {
+                                        System.out.print("Enter Minimum Balance: ");
+                                        double minBal = sc.nextDouble();
+                                        bankAccounts[accountCount] = new CheckingAccount(accountNo, accountName, minBal);
+                                        validCaseOne = true;
+                                    } catch (InputMismatchException e) {
+                                        System.out.println("Invalid Input! Please enter valid numbers.");
+                                        sc.nextLine();
+                                    }
+                                }
+                                break;
+                            case 2:
+                                boolean validCaseTwo = false;
+                                while (!validCaseTwo) {
+                                    try {
+                                        System.out.print("Enter Credit Limit: ");
+                                        double creditLimit = sc.nextDouble();
+                                        bankAccounts[accountCount] = new CreditCardAccount(accountNo, accountName, creditLimit, 0);
+                                        validCaseTwo = true;
+                                    } catch (InputMismatchException e) {
+                                        System.out.println("Invalid Input! Please enter valid numbers.");
+                                        sc.nextLine();
+                                    }
+                                }
+                                break;
+
                                 case 3:
-                                    boolean validInput = false;
-                                    while (!validInput) {
+                                    boolean validCaseThree = false;
+                                    while (!validCaseThree) {
                                         try {
                                             System.out.print("Enter Minimum Balance: ");
                                             double minInvestment = sc.nextDouble();
                                             System.out.print("Enter Interest Rate: ");
                                             double interest = sc.nextDouble();
                                             bankAccounts[accountCount] = new InvestmentAccount(accountNo, accountName, minInvestment, interest);
-                                            validInput = true;
+                                            validCaseThree = true;
                                         } catch (InputMismatchException e) {
-                                            System.out.println("Invalid Input! Please enter valid numbers for Minimum Balance and Interest Rate.");
+                                            System.out.println("Invalid Input! Please enter valid numbers.");
                                             sc.nextDouble();
                                         }
                                     }
@@ -88,6 +107,7 @@ public class AccountsMain {
                                 default:
                                     System.out.println("Invalid account type.");
                                     continue;
+
                             }
                             System.out.println("Account created successfully.");
                             accountCount++;
