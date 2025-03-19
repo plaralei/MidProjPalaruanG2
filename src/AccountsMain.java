@@ -1,59 +1,60 @@
 import java.util.HashMap;
 import java.util.InputMismatchException;
-import java.util.Scanner;
 import java.util.Random;
-
+import java.util.Scanner;
 
 public class AccountsMain {
     static HashMap<String, String> userAccounts = new HashMap<>();
     static HashMap<Integer, BankAccounts> bankAccountsMap = new HashMap<>();
-    static Scanner sc = new Scanner(System.in);;
+    static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
         boolean isLoggedIn = false;
 
-        int accountNumber = generateAccountNumber();
-        System.out.println("Generated Account Number: " + accountNumber);
-
         while (!isLoggedIn) {
-            System.out.println("1. Create Account");
-            System.out.println("2. Log In");
-            System.out.println("3. Exit");
-            System.out.print("Enter your choice: ");
+            try {
+                System.out.println("1. Create Account");
+                System.out.println("2. Log In");
+                System.out.println("3. Exit");
+                System.out.print("Enter your choice: ");
 
-            int choice = sc.nextInt();
-            sc.nextLine();
+                int choice = sc.nextInt();
+                sc.nextLine();
 
-            switch (choice) {
-                case 1:
-                    createAccount();
-                    break;
-                case 2:
-                    isLoggedIn = login();
-                    break;
-                case 3:
-                    System.out.println("Exiting...");
-                    return;
-                default:
-                    System.out.println("Invalid choice.");
+                switch (choice) {
+                    case 1:
+                        createAccount();
+                        break;
+                    case 2:
+                        isLoggedIn = login();
+                        break;
+                    case 3:
+                        System.out.println("Exiting...");
+                        return;
+                    default:
+                        System.out.println("Invalid choice. Please enter 1, 2, or 3.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number.");
+                sc.nextLine();
             }
         }
 
         int choice;
         do {
-            System.out.println("1. Open New Investment Account");
-            System.out.println("2. Open New Credit Card Account");
-            System.out.println("3. Open New Checking Account");
-            System.out.println("4. Balance Inquiry");
-            System.out.println("5. Deposit");
-            System.out.println("6. Withdraw");
-            System.out.println("7. Transfer Money");
-            System.out.println("8. Account Information");
-            System.out.println("9. Close Account");
-            System.out.println("0. Exit");
-            System.out.print("Enter your choice: ");
-
             try {
+                System.out.println("\n1. Open Investment Account");
+                System.out.println("2. Open Credit Card Account");
+                System.out.println("3. Open Checking Account");
+                System.out.println("4. Balance Inquiry");
+                System.out.println("5. Deposit");
+                System.out.println("6. Withdraw");
+                System.out.println("7. Transfer Money");
+                System.out.println("8. Account Information");
+                System.out.println("9. Close Account");
+                System.out.println("0. Exit");
+                System.out.print("Enter your choice: ");
+
                 choice = sc.nextInt();
                 sc.nextLine();
 
@@ -68,23 +69,13 @@ public class AccountsMain {
                         createCheckingAccount();
                         break;
                     case 4:
-                        System.out.print("Enter Account Number: ");
-                        int accountNo = sc.nextInt();
-                        sc.nextLine();
-                        BankAccounts acc = findAccount(accountNo);
-                        if (acc instanceof InvestmentAccount) {
-                            System.out.println("Investment Value (including interest): " + ((InvestmentAccount) acc).inquireInvestmentValue());
-                        } else if (acc != null) {
-                            System.out.println("Balance: " + acc.inquireBalance());
-                        } else {
-                            System.out.println("Account not found.");
-                        }
+                        performBalanceInquiry();
                         break;
                     case 5:
-                        performTransaction("deposit");
+                        performTransfer("deposit");
                         break;
                     case 6:
-                        performTransaction("withdraw");
+                        performTransfer("withdraw");
                         break;
                     case 7:
                         performTransfer();
@@ -99,7 +90,7 @@ public class AccountsMain {
                         System.out.println("Exiting...");
                         break;
                     default:
-                        System.out.println("Invalid choice.");
+                        System.out.println("Invalid choice. Please enter a number between 0-9.");
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Please enter a valid number.");
@@ -109,42 +100,70 @@ public class AccountsMain {
         } while (choice != 0);
     }
 
+    public static void performTransfer() {
+        try {
+            System.out.print("Enter Account Number: ");
+            int accountNo = sc.nextInt();
+            sc.nextLine();
+            BankAccounts acc = findAccount(accountNo);
+
+            if (acc == null) {
+                System.out.println("Account not found. Please check the account number.");
+                return;
+            }
+            System.out.print("Enter Amount: ");
+            double amount = validatePositiveDouble(); // Ensure positive input
+
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input! Please enter a valid number.");
+            sc.nextLine(); // Clear invalid input
+        } catch (Exception e) {
+            System.out.println("An error occurred during the transaction: " + e.getMessage());
+        }
+    }
+
 
     public static void createAccount() {
         try {
-            String fullName;
-            while (true) {
+            String fullName = "";
+            while (fullName.isEmpty()) {
                 System.out.print("Enter Full Name: ");
-                fullName = sc.nextLine();
-                if (fullName.matches("[a-zA-Z ]+")) {
-                    break;
-                } else {
+                fullName = sc.nextLine().trim();
+                if (!fullName.matches("[a-zA-Z ]+")) {
                     System.out.println("Invalid name! Please enter only letters and spaces.");
+                    fullName = ""; // Reset input
                 }
             }
 
-            String password;
-            while (true) {
+            String password = "";
+            while (password.isEmpty()) {
                 System.out.print("Enter a 6-digit PIN: ");
-                password = sc.nextLine();
-                if (password.matches("\\d{6}")) {
-                    break;
-                } else {
+                password = sc.nextLine().trim();
+                if (!password.matches("\\d{6}")) {
                     System.out.println("Invalid PIN! Enter a 6-digit number.");
+                    password = ""; // Reset input
                 }
             }
+            // Display success message
+            System.out.println("Account created successfully!");
+            System.out.println("Account Info:");
+            System.out.println("Full Name: " + fullName);
+            int accountNo = generateUniqueAccountNumber();
+            System.out.println("Generated Account Number: " + accountNo);
 
             userAccounts.put(fullName.toLowerCase(), password); // Store name in lowercase for case-insensitive login
-            System.out.println("Account created successfully!");
+            bankAccountsMap.put(accountNo, new BankAccounts(accountNo, fullName));
+
         } catch (Exception e) {
             System.out.println("Error creating account: " + e.getMessage());
         }
     }
 
+
     public static boolean login() {
-        System.out.print("Enter Full name: ");
-        String fullName = sc.nextLine().toLowerCase(); // Convert to lowercase
-        System.out.print("Enter PIN (6 digit): ");
+        System.out.print("Enter Full Name: ");
+        String fullName = sc.nextLine().toLowerCase();
+        System.out.print("Enter PIN (6 digits): ");
         String password = sc.nextLine();
 
         if (userAccounts.containsKey(fullName) && userAccounts.get(fullName).equals(password)) {
@@ -157,8 +176,8 @@ public class AccountsMain {
     }
 
     public static void createInvestmentAccount() {
-        int accountNo = generateAccountNumber(); // Generate a random 9-digit account number
-        System.out.println("Generated Account Number: " + accountNo); // Show the generated number
+        int accountNo = generateUniqueAccountNumber();
+        System.out.println("Generated Account Number: " + accountNo);
         System.out.print("Enter Account Name: ");
         String accountName = sc.nextLine();
         bankAccountsMap.put(accountNo, new InvestmentAccount(accountNo, accountName));
@@ -166,42 +185,74 @@ public class AccountsMain {
     }
 
     public static void createCreditCardAccount() {
-        int accountNo = generateAccountNumber();
+        int accountNo = generateUniqueAccountNumber();
         System.out.println("Generated Account Number: " + accountNo);
         System.out.print("Enter Account Name: ");
         String accountName = sc.nextLine();
         System.out.print("Enter Credit Limit: ");
-        double creditLimit = sc.nextDouble();
-        sc.nextLine();
+        double creditLimit = validatePositiveDouble();
         bankAccountsMap.put(accountNo, new CreditCardAccount(accountNo, accountName, creditLimit, 0));
         System.out.println("Credit Card Account Created Successfully!");
     }
 
     public static void createCheckingAccount() {
-        int accountNo = generateAccountNumber();
+        int accountNo = generateUniqueAccountNumber();
         System.out.println("Generated Account Number: " + accountNo);
         System.out.print("Enter Account Name: ");
         String accountName = sc.nextLine();
         System.out.print("Enter Minimum Balance: ");
-        double minBalance = sc.nextDouble();
-        sc.nextLine();
+        double minBalance = validatePositiveDouble();
         bankAccountsMap.put(accountNo, new CheckingAccount(accountNo, accountName, minBalance));
         System.out.println("Checking Account Created Successfully!");
     }
 
-    public static BankAccounts findAccount(int accountNo) {
-        return bankAccountsMap.get(accountNo);
+    public static int generateUniqueAccountNumber() {
+        Random rand = new Random();
+        int accountNo;
+        do {
+            accountNo = 100000000 + rand.nextInt(900000000);
+        } while (bankAccountsMap.containsKey(accountNo)); // Ensure unique account number
+        return accountNo;
     }
 
-    public static void performTransaction(String type) {
+    public static double validatePositiveDouble() {
+        double value;
+        while (true) {
+            try {
+                value = sc.nextDouble();
+                if (value > 0) {
+                    sc.nextLine();
+                    return value;
+                } else {
+                    System.out.println("Amount must be greater than zero. Try again: ");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input! Please enter a valid number: ");
+                sc.nextLine();
+            }
+        }
+    }
+
+    public static void performBalanceInquiry() {
+        System.out.print("Enter Account Number: ");
+        int accountNo = sc.nextInt();
+        sc.nextLine();
+        BankAccounts acc = findAccount(accountNo);
+        if (acc != null) {
+            System.out.println("Balance: " + acc.inquireBalance());
+        } else {
+            System.out.println("Account not found.");
+        }
+    }
+
+    public static void performTransfer(String type) {
         System.out.print("Enter Account Number: ");
         int accountNo = sc.nextInt();
         sc.nextLine();
         BankAccounts acc = findAccount(accountNo);
         if (acc != null) {
             System.out.print("Enter Amount: ");
-            double amount = sc.nextDouble();
-            sc.nextLine();
+            double amount = validatePositiveDouble();
             if (type.equals("deposit")) {
                 acc.deposit(amount);
             } else {
@@ -212,46 +263,35 @@ public class AccountsMain {
         }
     }
 
-    public static void performTransfer() {
-        System.out.print("Enter Your Account Number: ");
-        int fromAccNum = sc.nextInt();
-        sc.nextLine();
-        BankAccounts fromAcc = findAccount(fromAccNum);
-        System.out.print("Enter Target Account Number: ");
-        int toAccNum = sc.nextInt();
-        sc.nextLine();
-        BankAccounts toAcc = findAccount(toAccNum);
-        if (fromAcc != null && toAcc != null) {
-            System.out.print("Enter Transfer Amount: ");
-            double amount = sc.nextDouble();
-            sc.nextLine();
-            fromAcc.transferMoney(toAcc, amount);
-        } else {
-            System.out.println("One or both accounts not found.");
-        }
+    public static BankAccounts findAccount(int accountNo) {
+        return bankAccountsMap.get(accountNo);
     }
 
     public static void displayAccountInfo() {
-        System.out.print("Enter Account Number: ");
-        int accountNo = sc.nextInt();
-        sc.nextLine();
-        BankAccounts acc = findAccount(accountNo);
-        if (acc != null) {
+        try {
+            System.out.print("Enter Account Number: ");
+            int accountNo = sc.nextInt();
+            sc.nextLine();
+            BankAccounts acc = findAccount(accountNo);
+
+            if (acc == null) {
+                System.out.println("Account not found. Please check the account number.");
+                return;
+            }
+
+            // Display common account details
+            System.out.println("\nAccount Information:");
             System.out.println("Account Number: " + acc.getAccountNo());
             System.out.println("Account Name: " + acc.getAccountName());
             System.out.println("Balance: " + acc.inquireBalance());
-            if (acc instanceof InvestmentAccount) {
-                System.out.println("Interest Rate: " + ((InvestmentAccount) acc).getInterest());
-            }
-        } else {
-            System.out.println("Account not found.");
-        }
-    }
+            System.out.println("Status: Active");
 
-    public static int generateAccountNumber() {
-        Random rand = new Random();
-        // Generate a 9-digit number (100000000 to 999999999)
-        return 100000000 + rand.nextInt(900000000);
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input! Please enter a valid account number.");
+            sc.nextLine(); // Clear invalid input
+        } catch (Exception e) {
+            System.out.println("An error occurred while retrieving account information: " + e.getMessage());
+        }
     }
 
     public static void closeAccount() {
