@@ -9,6 +9,7 @@ public class CreditCardAccount extends BankAccounts {
 
     // Constructor to initialize the credit card account with given details
     public CreditCardAccount(int accountNo, String accountName, double creditLimit, double charges) {
+        super(accountNo,accountName);
         this.creditLimit = creditLimit;
         this.charges = charges;
     }

@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class BankAccounts {
     private int accountNo;          // 9-digit account number
     private String accountName;
