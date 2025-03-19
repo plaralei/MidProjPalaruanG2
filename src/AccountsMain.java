@@ -1,3 +1,4 @@
+import java.sql.SQLOutput;
 import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Random;
@@ -12,6 +13,8 @@ public class AccountsMain {
 
     public static void main(String[] args) {
         boolean isLoggedIn = false;
+
+        System.out.println("Welcome to SLU's Computer Science Banking System!");
 
         // Menu for user to see general info, log in, create an account, or exit
         while (!isLoggedIn) {
