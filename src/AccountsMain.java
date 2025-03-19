@@ -157,9 +157,8 @@ public class AccountsMain {
     }
 
     public static void createInvestmentAccount() {
-        System.out.print("Enter Account Number: ");
-        int accountNo = sc.nextInt();
-        sc.nextLine();
+        int accountNo = generateAccountNumber(); // Generate a random 9-digit account number
+        System.out.println("Generated Account Number: " + accountNo); // Show the generated number
         System.out.print("Enter Account Name: ");
         String accountName = sc.nextLine();
         bankAccountsMap.put(accountNo, new InvestmentAccount(accountNo, accountName));
@@ -167,9 +166,8 @@ public class AccountsMain {
     }
 
     public static void createCreditCardAccount() {
-        System.out.print("Enter Account Number: ");
-        int accountNo = sc.nextInt();
-        sc.nextLine();
+        int accountNo = generateAccountNumber();
+        System.out.println("Generated Account Number: " + accountNo);
         System.out.print("Enter Account Name: ");
         String accountName = sc.nextLine();
         System.out.print("Enter Credit Limit: ");
@@ -180,9 +178,8 @@ public class AccountsMain {
     }
 
     public static void createCheckingAccount() {
-        System.out.print("Enter Account Number: ");
-        int accountNo = sc.nextInt();
-        sc.nextLine();
+        int accountNo = generateAccountNumber();
+        System.out.println("Generated Account Number: " + accountNo);
         System.out.print("Enter Account Name: ");
         String accountName = sc.nextLine();
         System.out.print("Enter Minimum Balance: ");
