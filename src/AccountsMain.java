@@ -53,7 +53,7 @@ public class AccountsMain {
 
             try {
                 choice = sc.nextInt();
-                sc.nextLine(); // Consume newline
+                sc.nextLine();
 
                 switch (choice) {
                     case 1:
@@ -85,16 +85,34 @@ public class AccountsMain {
 
                             switch (type) {
                                 case 1:
-                                    System.out.print("Enter Minimum Balance: ");
-                                    double minBal = sc.nextDouble();
-                                    sc.nextLine(); // Consume newline
-                                    bankAccounts[accountCount] = new CheckingAccount(accountNo, accountName, minBal);
+                                    boolean validInputOne = false;
+                                    while (!validInputOne) {
+                                        try {
+                                            System.out.print("Enter Minimum Balance: ");
+                                            double minBal = sc.nextDouble();
+                                            sc.nextLine();
+                                            bankAccounts[accountCount] = new CheckingAccount(accountNo, accountName, minBal);
+                                            validInputOne = true;
+                                        } catch (InputMismatchException e) {
+                                            System.out.println("Invalid Input! Please enter valid numbers for Minimum Balance and Interest Rate.");
+                                            sc.nextLine();
+                                        }
+                                    }
                                     break;
                                 case 2:
-                                    System.out.print("Enter Credit Limit: ");
-                                    double creditLimit = sc.nextDouble();
-                                    sc.nextLine(); // Consume newline
-                                    bankAccounts[accountCount] = new CreditCardAccount(accountNo, accountName, creditLimit, 0);
+                                    boolean validInputTwo = false;
+                                    while(!validInputTwo) {
+                                        try {
+                                            System.out.print("Enter Credit Limit: ");
+                                            double creditLimit = sc.nextDouble();
+                                            sc.nextLine();
+                                            bankAccounts[accountCount] = new CreditCardAccount(accountNo, accountName, creditLimit, 0);
+                                            validInputTwo = true;
+                                        } catch (InputMismatchException e) {
+                                            System.out.println("Invalid Input! Please enter valid numbers for Minimum Balance and Interest Rate.");
+                                            sc.nextLine();
+                                        }
+                                    }
                                     break;
                                 case 3:
                                     boolean validInput = false;
