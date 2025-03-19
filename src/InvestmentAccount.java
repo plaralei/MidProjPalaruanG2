@@ -1,52 +1,104 @@
+/**
+ * The InvestmentAccount class represents a specialized bank account with a fixed minimum balance
+ * and an interest rate set by the bank. This account does not allow withdrawals or money transfers.
+ * Instead, it allows users to add investments and inquire about their investment value.
+ *
+ */
+
 public class InvestmentAccount extends BankAccounts {
-    private double minimumBalance;
-    private double interest;
+    private static final double minimumBalance = 1000.00;
+    private static final double interest = 0.05;
 
-    // Constructors
-    public InvestmentAccount() {
-        super();
-        this.minimumBalance = 0;
-        this.interest = 0.10;
-    }
+    /**
+     * Creates an InvestmentAccount with a default minimum balance.
+     *
+     * @param accountNo   The unique account number
+     * @param accountName The name of the account holder
+     */
 
-    public InvestmentAccount(int accountNo, String accountName, double minimumBalance, double interest) {
+    public InvestmentAccount(int accountNo, String accountName) {
         super(accountNo, accountName);
-        this.minimumBalance = minimumBalance;
-        this.interest = interest;
+        this.balance = minimumBalance;
     }
 
-    // Getters
+    /**
+     * Gets the minimum balance required for the investment account.
+     *
+     * @return The fixed minimum balance
+     */
+
     public double getMinimumBalance() {
         return minimumBalance;
     }
+
+    /**
+     * Gets the interest rate applied to the investment account.
+     *
+     * @return The fixed interest rate
+     */
 
     public double getInterest() {
         return interest;
     }
 
-    // Add investment (acts like a deposit)
-
-
-    // Inquire investment value (balance + interest)
-    public double inquireInvestmentValue() {
-        if (balance > 0) {
-            return balance * (1 + interest);
-        } else {
-            System.out.println("No balance in account.");
-            return 0;
+    /**
+     * Adds an investment amount to the account balance.
+     *
+     * @param amount The amount to invest (must be positive)
+     * @throws IllegalArgumentException if the amount is zero or negative
+     */
+    public void addInvestment(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Investment amount must be positive.");
         }
+        this.balance += amount;
+        System.out.println("Successfully invested: " + amount);
     }
 
-    // Override close account (withdraw full amount with interest)
+    /**
+     * Inquires about the current investment value, which includes interest.
+     *
+     * @return The total investment value, calculated as balance * (1 + interest rate)
+     */
+    public double inquireInvestmentValue() {
+        return balance * (1 + interest);
+    }
+    /**
+     * Closes the investment account by withdrawing all funds, including interest.
+     * The status is then set to "Closed".
+     */
     @Override
     public void closeAccount() {
+        double totalBalance = inquireInvestmentValue();
+        System.out.println("Withdrawing Final Balance (with interest): " + totalBalance);
         if (balance > 0) {
-            double totalBalance = inquireInvestmentValue();
             balance = 0;
-            System.out.println("Account closed. Final balance (with interest): " + totalBalance); //withdraw all balanace before closing
             super.closeAccount();
         } else {
             System.out.println("Account already empty.");
         }
+    }
+
+    /**
+     * Prevents withdrawals from an investment account.
+     *
+     * @param amount The withdrawal amount
+     * @throws UnsupportedOperationException Always thrown since withdrawals are not allowed
+     */
+    @Override
+    public void withdraw(double amount) {
+        throw new UnsupportedOperationException("Withdrawals are not allowed from an investment account.");
+    }
+
+    /**
+     * Prevents transfers from an investment account.
+     *
+     * @param target The target account
+     * @param amount The transfer amount
+     * @throws UnsupportedOperationException Always thrown since transfers are not allowed
+     */
+    @Override
+    public void transferMoney(BankAccounts target, double amount) {
+        throw new UnsupportedOperationException("Transfers are not allowed from an investment account.");
     }
 }
