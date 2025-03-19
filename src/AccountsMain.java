@@ -51,8 +51,8 @@ public class AccountsMain {
                                 }
                             } while (type < 1 || type > 3);
 
-                            System.out.print("Enter Account Number: ");
-                            int accountNo = sc.nextInt();
+
+                            int accountNo = readAccountNo();
                             sc.nextLine();
                             System.out.print("Enter Account Holder Name: ");
                             String accountName = sc.nextLine();
@@ -207,5 +207,34 @@ public class AccountsMain {
             }
         }
         return null;
+    }
+
+    public static int readAccountNo() {
+        Scanner sc = new Scanner(System.in);
+        boolean validNo = false;
+        int accountNo = 0;
+
+        while (!validNo) {
+            try {
+                System.out.print("Enter Account Number: ");
+                String input = sc.nextLine();
+
+
+                if (input.matches("\\d{9}")) {
+                    accountNo = Integer.parseInt(input);
+                    validNo = true;
+                } else {
+                    System.out.println("Invalid input! Please enter exactly 9 digits.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input! Please enter numbers only.");
+                sc.nextLine();
+            } catch (Exception e) {
+                System.out.println("An unexpected error occurred.");
+                sc.nextLine();
+            }
+        }
+
+        return accountNo;
     }
 }

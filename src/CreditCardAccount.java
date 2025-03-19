@@ -3,7 +3,9 @@ public class CreditCardAccount extends BankAccounts {
     private double creditLimit;  // Credit limit for the card
     private double charges;      // Amount currently charged to the card
 
-    public CreditCardAccount() {super();}
+    public CreditCardAccount() {
+        super();
+    }
 
     // Constructor to initialize the credit card account with given details
     public CreditCardAccount(int accountNo, String accountName, double creditLimit, double charges) {
