@@ -1,20 +1,20 @@
 import java.util.Scanner;
 
 public class BankAccounts {
-    private int accountNo;          // 9-digit account number
+    private int accountNo;
     private String accountName;
-    protected double balance;       // protected so it can be accessed in subclasses
-    protected String status;        // "active" or "closed"
+    protected double balance;
+    protected String status;
     protected String password;
 
-    // Constructors
+
     public BankAccounts() {
         this.status = "active";
         this.balance = 0;
     }
 
     public BankAccounts(int accountNo, String accountName) {
-        this(); // Call default constructor
+        this();
         if (String.valueOf(accountNo).length() == 9) {
             this.accountNo = accountNo;
         } else {
@@ -35,7 +35,7 @@ public class BankAccounts {
         System.out.println("Status: Active\n");
     }
 
-    // Getter and Setter methods
+
     public int getAccountNo() {
         return accountNo;
     }
@@ -64,7 +64,7 @@ public class BankAccounts {
         }
     }
 
-    // Deposit method with exception handling
+
     public void deposit(double amount) {
         try {
             if (amount > 0) {
@@ -78,7 +78,7 @@ public class BankAccounts {
         }
     }
 
-    // Withdraw method with exception handling
+
     public void withdraw(double amount) {
         try {
             if (balance >= amount) {
@@ -96,12 +96,12 @@ public class BankAccounts {
         }
     }
 
-    // Balance inquiry
+
     public double inquireBalance() {
         return balance;
     }
 
-    // Close account with exception handling
+
     public void closeAccount() {
         try {
             if (balance == 0) {
@@ -115,7 +115,7 @@ public class BankAccounts {
         }
     }
 
-    // Transfer money with exception handling
+
     public void transferMoney(BankAccounts targetAccount, double amount) {
         try {
             if (targetAccount == null) {
