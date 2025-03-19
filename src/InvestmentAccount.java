@@ -12,13 +12,11 @@ public class InvestmentAccount extends BankAccounts {
     /**
      * Creates an InvestmentAccount with a default minimum balance.
      *
-     * @param accountNo     The unique account number
-     * @param accountName   The name of the account holder
-     * @param minInvestment
-     * @param interest
+     * @param accountNo   The unique account number
+     * @param accountName The name of the account holder
      */
 
-    public InvestmentAccount(int accountNo, String accountName, double minInvestment, double interest) {
+    public InvestmentAccount(int accountNo, String accountName) {
         super(accountNo, accountName);
         this.balance = minimumBalance;
     }
