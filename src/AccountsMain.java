@@ -1,9 +1,9 @@
 import java.util.HashMap;
 import java.util.InputMismatchException;
+import java.util.Random;
 import java.util.Scanner;
 
 public class AccountsMain {
-    // Store usernames and passwords in a map (simple for now, no encryption)
     static HashMap<String, String> userAccounts = new HashMap<>();
     static Scanner sc = new Scanner(System.in);
 
@@ -79,8 +79,9 @@ public class AccountsMain {
                                 }
                             } while (type < 1 || type > 3);
 
-                            int accountNo = readAccountNo();
-                            String accountName = readAccountName();
+                            int accountNo = generateAccountNo(); // Generate a 9-digit account number
+                            System.out.print("Enter Account Holder Name: ");
+                            String accountName = sc.nextLine();
 
                             switch (type) {
                                 case 1:
@@ -134,7 +135,7 @@ public class AccountsMain {
                                     System.out.println("Invalid account type.");
                                     continue;
                             }
-                            System.out.println("Account created successfully.");
+                            System.out.println("Account created successfully. Account Number: " + accountNo);
                             accountCount++;
                         } else {
                             System.out.println("Account limit reached.");
@@ -223,11 +224,7 @@ public class AccountsMain {
                         sc.nextLine(); // Consume newline
                         acc = findAccount(bankAccounts, accountNo);
                         if (acc != null) {
-                            if (acc instanceof InvestmentAccount) {
-                                ((InvestmentAccount) acc).closeAccount();
-                            } else {
-                                acc.closeAccount();
-                            }
+                            acc.closeAccount();
                         } else {
                             System.out.println("Account not found.");
                         }
@@ -252,13 +249,6 @@ public class AccountsMain {
         System.out.print("Enter Full Name (FirstName MiddleInitial. LastName): ");
         String fullName = sc.nextLine();
 
-        System.out.print("Enter Username: ");
-        String username = sc.nextLine().toLowerCase(); // Convert to lowercase for case-insensitivity
-        if (userAccounts.containsKey(username)) {
-            System.out.println("Username already exists.");
-            return;
-        }
-
         // Ensure password is a 6-digit numeric PIN
         String password = "";
         while (true) {
@@ -271,76 +261,49 @@ public class AccountsMain {
             }
         }
 
-        userAccounts.put(username, password);
+        int accountNo = generateAccountNo(); // Generate a 9-digit account number for the user
+        userAccounts.put(fullName, password);
         System.out.println("Account created successfully!");
         System.out.println("Account Info:");
         System.out.println("Full Name: " + fullName);
-        System.out.println("Username: " + username);
         System.out.println("Password: " + password);
+        System.out.println("Account Number: " + accountNo); // Display the generated 9-digit account number
     }
 
     // Method to log in to the system
     public static boolean login() {
-        System.out.print("Enter Username: ");
-        String username = sc.nextLine().toLowerCase(); // Convert to lowercase for case-insensitivity
-        System.out.print("Enter PIN (6 digit): ");
-        String password = sc.nextLine();
+        System.out.print("Enter your Full Name: ");
+        String fullName = sc.nextLine();
 
-        if (userAccounts.containsKey(username) && userAccounts.get(username).equals(password)) {
-            System.out.println("Login successful!");
-            return true;
-        } else {
-            System.out.println("Invalid username / password or account doesn't exist.");
-            return false;
+        for (int attempts = 3; attempts > 0; attempts--) {
+            System.out.print("Enter your 6-digit PIN: ");
+            String password = sc.nextLine();
+
+            if (userAccounts.containsKey(fullName) && userAccounts.get(fullName).equals(password)) {
+                System.out.println("Successfully logged in!");
+                return true;
+            } else {
+                System.out.println("Incorrect login information! You have " + (attempts - 1) + " attempts left.");
+            }
         }
+
+        System.out.println("Login failed.");
+        return false;
     }
 
-    // Utility method to find an account
-    public static BankAccounts findAccount(BankAccounts[] bankAccounts, int accountNo) {
-        for (BankAccounts account : bankAccounts) {
-            if (account != null && account.getAccountNo() == accountNo) {
-                return account;
+    // Method to find an account by account number
+    public static BankAccounts findAccount(BankAccounts[] accounts, int accountNo) {
+        for (BankAccounts acc : accounts) {
+            if (acc != null && acc.getAccountNo() == accountNo) {
+                return acc;
             }
         }
         return null;
     }
 
-    // Method to read account number input
-    public static int readAccountNo() {
-        int accountNo = 0;
-        boolean validInput = false;
-        while (!validInput) {
-            try {
-                System.out.print("Enter Account Number: ");
-                accountNo = sc.nextInt();
-                sc.nextLine(); // Consume newline
-                validInput = true;
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input. Please enter a valid account number.");
-                sc.nextLine();
-            }
-        }
-        return accountNo;
-    }
-
-    // Method to read account name input
-    public static String readAccountName() {
-        Scanner sc = new Scanner(System.in);
-        boolean validName = false;
-        String accountName = "";
-
-        while (!validName) {
-            try {
-                System.out.print("Enter Account Holder Name: ");
-                accountName = sc.nextLine();
-                Integer.parseInt(accountName);
-                System.out.println("Invalid input! Please enter string only.");
-            } catch (NumberFormatException e) {
-                validName = true;
-            } catch (Exception e) {
-                System.out.println("An unexpected error occurred.");
-            }
-        }
-        return accountName;
+    // Method to generate a 9-digit account number
+    public static int generateAccountNo() {
+        Random rand = new Random();
+        return 100000000 + rand.nextInt(900000000); // Generates a 9-digit random number
     }
 }
