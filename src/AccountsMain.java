@@ -1,6 +1,7 @@
 import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.Random;
 
 public class AccountsMain {
     static HashMap<String, String> userAccounts = new HashMap<>();
@@ -104,12 +105,16 @@ public class AccountsMain {
         } while (choice != 0);
     }
 
+    // Method to generate a 9-digit account number
+    public static int generateAccountNo() {
+        Random random = new Random();
+        // Ensure it's a 9-digit number
+        return 100000000 + random.nextInt(900000000);
+    }
+
     public static void createAccount() {
         System.out.print("Enter Full Name: ");
         String fullName = sc.nextLine();
-
-        System.out.print("Enter Username: ");
-        String username = sc.nextLine();
 
         String password;
         while (true) {
@@ -122,17 +127,17 @@ public class AccountsMain {
             }
         }
 
-        userAccounts.put(username, password);
+        userAccounts.put(fullName, password);
         System.out.println("Account created successfully!");
     }
 
     public static boolean login() {
-        System.out.print("Enter Username: ");
-        String username = sc.nextLine();
+        System.out.print("Enter Full name: ");
+        String Fullname = sc.nextLine();
         System.out.print("Enter PIN (6 digit): ");
         String password = sc.nextLine();
 
-        if (userAccounts.containsKey(username) && userAccounts.get(username).equals(password)) {
+        if (userAccounts.containsKey(Fullname) && userAccounts.get(Fullname).equals(password)) {
             System.out.println("Login successful!");
             return true;
         } else {
