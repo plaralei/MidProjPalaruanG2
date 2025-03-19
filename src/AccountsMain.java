@@ -1,273 +1,102 @@
+import java.util.HashMap;
 import java.util.InputMismatchException;
+import java.util.Random;
 import java.util.Scanner;
 
 public class AccountsMain {
+
+    static HashMap<String, String> userAccounts = new HashMap<>();
+    static Scanner sc = new Scanner(System.in);
+    static boolean accountCreated = false; // Track if an account has been created
+    static String generatedAccountNumber = ""; // Store generated account number
+
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+        boolean isLoggedIn = false;
 
-        // Array to store all the 3 types of accounts
-        BankAccounts[] bankAccounts = new BankAccounts[5];
-        int accountCount = 0;
-
-        // Menu options
-        int choice = -1;
-        while (choice != 0) {
-            System.out.println("1. Create Bank Account");
-            System.out.println("2. Balance Inquiry");
-            System.out.println("3. Deposit");
-            System.out.println("4. Withdraw");
-            System.out.println("5. Transfer Money");
-            System.out.println("6. Account Information");
-            System.out.println("7. Close Account");
-            System.out.println("0. Exit");
+        // Menu for user to see general info, log in, create an account, or exit
+        while (!isLoggedIn) {
+            System.out.println("1. " + (accountCreated ? "Create Another Account" : "Create Account"));
+            System.out.println("2. General Info");
+            System.out.println("3. Log In");
+            System.out.println("4. Exit");
             System.out.print("Enter your choice: ");
+            int choice = sc.nextInt();
+            sc.nextLine(); // Consume newline
 
-
-            try {
-                choice = sc.nextInt();
-
-                switch (choice) {
-                    case 1:
-                        if (accountCount < bankAccounts.length) {
-                            System.out.println("Select Account Type: ");
-                            int type = -1;
-
-                            do {
-                                try {
-                                    System.out.println("1. Checking");
-                                    System.out.println("2. Credit Card");
-                                    System.out.println("3. Investment");
-                                    System.out.print("Enter a valid option (1-3): ");
-                                    type = sc.nextInt();
-
-
-                                    if (type < 1 || type > 3) {
-                                        System.out.println("Invalid option. Please enter a number between 1 and 3.");
-                                    }
-                                } catch (InputMismatchException e) {
-
-                                    System.out.println("Invalid input. Please enter a numeric value between 1 and 3.");
-                                    sc.nextLine();
-                                }
-                            } while (type < 1 || type > 3);
-
-
-                            int accountNo = readAccountNo();
-                            sc.nextLine();
-                            String accountName = readAccountName();
-
-                            switch (type) {
-                            case 1:
-                                boolean validCaseOne = false;
-                                while (!validCaseOne) {
-                                    try {
-                                        System.out.print("Enter Minimum Balance: ");
-                                        double minBal = sc.nextDouble();
-                                        bankAccounts[accountCount] = new CheckingAccount(accountNo, accountName, minBal);
-                                        validCaseOne = true;
-                                    } catch (InputMismatchException e) {
-                                        System.out.println("Invalid Input! Please enter valid numbers.");
-                                        sc.nextLine();
-                                    }
-                                }
-                                break;
-                            case 2:
-                                boolean validCaseTwo = false;
-                                while (!validCaseTwo) {
-                                    try {
-                                        System.out.print("Enter Credit Limit: ");
-                                        double creditLimit = sc.nextDouble();
-                                        bankAccounts[accountCount] = new CreditCardAccount(accountNo, accountName, creditLimit, 0);
-                                        validCaseTwo = true;
-                                    } catch (InputMismatchException e) {
-                                        System.out.println("Invalid Input! Please enter valid numbers.");
-                                        sc.nextLine();
-                                    }
-                                }
-                                break;
-
-                                case 3:
-                                    boolean validCaseThree = false;
-                                    while (!validCaseThree) {
-                                        try {
-                                            System.out.print("Enter Minimum Balance: ");
-                                            double minInvestment = sc.nextDouble();
-                                            System.out.print("Enter Interest Rate: ");
-                                            double interest = sc.nextDouble();
-                                            bankAccounts[accountCount] = new InvestmentAccount(accountNo, accountName, minInvestment, interest);
-                                            validCaseThree = true;
-                                        } catch (InputMismatchException e) {
-                                            System.out.println("Invalid Input! Please enter valid numbers.");
-                                            sc.nextDouble();
-                                        }
-                                    }
-                                    break;
-
-                                default:
-                                    System.out.println("Invalid account type.");
-                                    continue;
-
-                            }
-                            System.out.println("Account created successfully.");
-                            accountCount++;
-                        } else {
-                            System.out.println("Account limit reached.");
-                        }
-                        break;
-                    case 2:
-
-                        System.out.print("Enter Account Number: ");
-                        int accountNo = sc.nextInt();
-
-                        BankAccounts acc = findAccount(bankAccounts, accountNo);
-
-                        if (acc instanceof InvestmentAccount) {
-                            System.out.println("Investment Value (including interest): " + ((InvestmentAccount) acc).inquireInvestmentValue());
-                        } else if (acc != null) {
-                            System.out.println("Balance: " + acc.inquireBalance());
-                        } else {
-                            System.out.println("Account not found.");
-                        }
-
-
-                        break;
-                    case 3:
-                        System.out.print("Enter Account Number: ");
-                        accountNo = sc.nextInt();
-                        acc = findAccount(bankAccounts, accountNo);
-                        if (acc != null) {
-                            System.out.print("Enter Deposit Amount: ");
-                            double amount = sc.nextDouble();
-                            acc.deposit(amount);
-                        } else {
-                            System.out.println("Account not found.");
-                        }
-                        break;
-                    case 4:
-                        System.out.print("Enter Account Number: ");
-                        accountNo = sc.nextInt();
-                        acc = findAccount(bankAccounts, accountNo);
-                        if (acc != null) {
-                            System.out.print("Enter Withdrawal Amount: ");
-                            double amount = sc.nextDouble();
-                            acc.withdraw(amount);
-                        } else {
-                            System.out.println("Account not found.");
-                        }
-                        break;
-                    case 5:
-                        System.out.print("Enter Your Account Number: ");
-                        int fromAccNum = sc.nextInt();
-                        BankAccounts fromAcc = findAccount(bankAccounts, fromAccNum);
-                        System.out.print("Enter Target Account Number: ");
-                        int toAccNum = sc.nextInt();
-                        BankAccounts toAcc = findAccount(bankAccounts, toAccNum);
-                        if (fromAcc != null && toAcc != null) {
-                            System.out.print("Enter Transfer Amount: ");
-                            double amount = sc.nextDouble();
-                            fromAcc.transferMoney(toAcc, amount);
-                        } else {
-                            System.out.println("One or both accounts not found.");
-                        }
-                        break;
-                    case 6:
-                        System.out.print("Enter Account Number: ");
-                        accountNo = sc.nextInt();
-                        acc = findAccount(bankAccounts, accountNo);
-                        if (acc != null) {
-                            System.out.println("Account Number: " + acc.getAccountNo());
-                            System.out.println("Account Name: " + acc.getAccountName());
-                            System.out.println("Balance: " + acc.inquireBalance());
-                            if (acc instanceof InvestmentAccount) {
-                                System.out.println("Interest Rate: " + ((InvestmentAccount) acc).getInterest());
-                            }
-                        } else {
-                            System.out.println("Account not found.");
-                        }
-                        break;
-                    case 7:
-
-                        System.out.print("Enter Account Number to Close: ");
-                        accountNo = sc.nextInt();
-                        acc = findAccount(bankAccounts, accountNo);
-                        if (acc != null) {
-                            if (acc instanceof InvestmentAccount) {
-                                ((InvestmentAccount) acc).closeAccount();
-                            } else {
-                                acc.closeAccount();
-                            }
-                        } else {
-                            System.out.println("Account not found.");
-                        }
-                        break;
-                    case 0:
-                        System.out.println("Exiting...");
-                        break;
-                    default:
-                        System.out.println("Invalid choice.");
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input. Please enter a valid number.");
-                sc.nextLine();
-            } catch (Exception e) {
-                System.out.println("An unexpected error occurred: " + e.getMessage());
-                // I worked
-                // Gumagana ba
+            switch (choice) {
+                case 1:
+                    createAccount();
+                    break;
+                case 2:
+                    displayGeneralInformation();
+                    break;
+                case 3:
+                    isLoggedIn = login();
+                    break;
+                case 4:
+                    System.out.println("Exiting...");
+                    return;
+                default:
+                    System.out.println("Invalid choice.");
             }
         }
-        sc.close();
+
+        // Once logged in, show the account number and continue with other actions
+        System.out.println("Your account number is: " + generatedAccountNumber);
+
+        // You can continue with other bank operations here...
     }
 
-    // Method to find an account by number
-    private static BankAccounts findAccount(BankAccounts[] accounts, int accountNo) {
-        for (BankAccounts account : accounts) {
-            if (account != null && account.getAccountNo() == accountNo) {
-                return account;
-            }
-        }
-        return null;
+    // Method to display general information for first-time users
+    public static void displayGeneralInformation() {
+        System.out.println("Welcome to the Bank Account System!");
+        System.out.println("Here are the key points you need to know as a first-time user:");
+        System.out.println("1. Bank Accounts: You can create different types of accounts such as Checking, Credit Card, or Investment.");
+        System.out.println("2. Interest Rates: Investment accounts allow you to earn interest on your balance.");
+        System.out.println("3. Deposits and Withdrawals: Manage your finances by depositing or withdrawing funds from your account.");
+        System.out.println("4. Transfer Money: You can transfer funds between different bank accounts.");
+        System.out.println("5. Checking Account: Suitable for daily transactions with minimal fees.");
+        System.out.println("6. Credit Card: Use it for purchases, but be aware of your credit limit and interest rates.");
+        System.out.println("7. Investment: Grow your money by earning interest over time.");
+        System.out.println("Now, let's begin!");
+        System.out.println();
     }
 
-    public static int readAccountNo() {
-        Scanner sc = new Scanner(System.in);
-        boolean validNo = false;
-        int accountNo = 0;
+    // Method to create a new user account
+    public static void createAccount() {
+        System.out.print("Enter Full Name (FirstName MI LastName): ");
+        String fullName = sc.nextLine();
+        System.out.print("Create a username: ");
+        String username = sc.nextLine();
+        System.out.print("Create a password: ");
+        String password = sc.nextLine();
 
-        while (!validNo) {
-            try {
-                System.out.print("Enter Account Number: ");
-                String input = sc.nextLine();
-                if (input.matches("\\d{9}")) {
-                    accountNo = Integer.parseInt(input);
-                    validNo = true;
-                } else {
-                    System.out.println("Invalid input! Please enter exactly 9 digits.");
-                }
-            } catch (Exception e) {
-                System.out.println("An unexpected error occurred.");
-                sc.nextLine();
-            }
-        }
-        return accountNo;
+        // Add the user credentials to the map
+        userAccounts.put(username, password);
+
+        // Generate a 9-digit account number
+        Random rand = new Random();
+        generatedAccountNumber = String.format("%09d", rand.nextInt(1000000000));
+
+        accountCreated = true; // Mark that an account has been created
+        System.out.println("Account successfully created! Your 9-digit account number is: " + generatedAccountNumber);
+        System.out.println("You can now log in.");
     }
 
-    public static String readAccountName() {
-        Scanner sc = new Scanner(System.in);
-        boolean validName = false;
-        String accountName = "";
+    // Method to log in the user
+    public static boolean login() {
+        System.out.print("Enter username: ");
+        String username = sc.nextLine();
+        System.out.print("Enter password: ");
+        String password = sc.nextLine();
 
-        while (!validName) {
-            try {
-                System.out.print("Enter Account Holder Name: ");
-                accountName = sc.nextLine();
-                Integer.parseInt(accountName);
-                System.out.println("Invalid input! Please enter string only.");
-            } catch (NumberFormatException e) {
-                validName = true;
-            } catch (Exception e) {
-                System.out.println("An unexpected error occurred.");
-            }
+        // Check if the user exists and the password matches
+        if (userAccounts.containsKey(username) && userAccounts.get(username).equals(password)) {
+            System.out.println("Login successful! Welcome back, " + username + ".");
+            return true;
+        } else {
+            System.out.println("Invalid username or password. Please try again.");
+            return false;
         }
-        return accountName;
     }
 }
