@@ -14,7 +14,7 @@ public class CheckingAccount extends BankAccounts {
     public double minimumBalance;
 
     /**
-     * Instance variables are assigned to their repective constructors
+     * Instance variables are assigned to their respective constructors
      *
      * @param accountNo 9-digit number that is connected to an account
      * @param accountName name that is connected to the account
@@ -40,15 +40,19 @@ public class CheckingAccount extends BankAccounts {
 
     /**
      *Encashes a check/exchanges a written check for cash
+     * UML doesn't list balance so balance cannot be added to/used when encashing a check
      *
      * @param amount The amount on the check
-     * @throws InsufficientBalanceException if the balance falls below the minimum balance after encashment
+     * @throws InvalidAmountException doesn't accept the check if the amount is zero
      */
-    public void encashCheck(double amount) throws InsufficientBalanceException {
-        if (inquireBalance() - amount < minimumBalance) {
-            throw new InsufficientBalanceException("Cannot encash check: Balance would fall below minimum requirement");
+    public void encashCheck(double amount) throws InvalidAmountException {
+        if ( amount==0) {
+            throw new InvalidAmountException ("Cannot encash a blank check");
         }
-        super.withdraw(amount);
+        if (amount <0){
+            throw new InvalidAmountException ("Cannot encash a negative check");
+        }
+        System.out.println("Please see a teller to encash check.");;
     }
 
     /**
@@ -63,8 +67,8 @@ public class CheckingAccount extends BankAccounts {
     }
 }
 
-class InsufficientBalanceException extends Exception {
-    public InsufficientBalanceException(String message) {
+class InvalidAmountException extends Exception {
+    public InvalidAmountException(String message) {
         super(message);
     }
 }
