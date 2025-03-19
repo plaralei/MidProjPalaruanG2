@@ -1,52 +1,54 @@
 public class InvestmentAccount extends BankAccounts {
-    private double minimumBalance;
-    private double interest;
+    private static final double MINIMUM_BALANCE = 1000.00; // Bank-defined minimum balance
+    private static final double INTEREST_RATE = 0.05; // Bank-defined interest rate (5%)
 
-    // Constructors
-    public InvestmentAccount() {
-        super();
-        this.minimumBalance = 0;
-        this.interest = 0.10;
-    }
-
-    public InvestmentAccount(int accountNo, String accountName, double minimumBalance, double interest) {
+    // Constructor
+    public InvestmentAccount(int accountNo, String accountName) {
         super(accountNo, accountName);
-        this.minimumBalance = minimumBalance;
-        this.interest = interest;
+        this.balance = MINIMUM_BALANCE; // Set initial balance to the required minimum
     }
 
-    // Getters
     public double getMinimumBalance() {
-        return minimumBalance;
+        return MINIMUM_BALANCE;
     }
 
     public double getInterest() {
-        return interest;
+        return INTEREST_RATE;
     }
 
-    // Add investment (acts like a deposit)
-
-
-    // Inquire investment value (balance + interest)
-    public double inquireInvestmentValue() {
-        if (balance > 0) {
-            return balance * (1 + interest);
-        } else {
-            System.out.println("No balance in account.");
-            return 0;
+    // Add investment (deposit)
+    public void addInvestment(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Investment amount must be positive.");
         }
+        this.balance += amount;
+        System.out.println("Successfully invested: " + amount);
     }
 
-    // Override close account (withdraw full amount with interest)
-    @Override
+    // Inquire Investment Value (balance * (1 + interest))
+    public double inquireInvestmentValue() {
+        return balance * (1 + INTEREST_RATE);
+    }
+
+    // Close Account
     public void closeAccount() {
         if (balance > 0) {
-            double totalBalance = inquireInvestmentValue();
+            double finalBalance = inquireInvestmentValue();
+            System.out.println("Withdrawing final balance: " + finalBalance);
             balance = 0;
-            System.out.println("Account closed. Final balance (with interest): " + totalBalance); //withdraw all balanace before closing
-            super.closeAccount();
-        } else {
-            System.out.println("Account already empty.");
         }
+        System.out.println("Account closed successfully.");
+        this.status = "Closed";
+    }
+
+    // Preventing withdrawals and transfers
+    @Override
+    public void withdraw(double amount) {
+        throw new UnsupportedOperationException("Withdrawals are not allowed from an investment account.");
+    }
+
+    @Override
+    public void transferMoney(BankAccounts target, double amount) {
+        throw new UnsupportedOperationException("Transfers are not allowed from an investment account.");
     }
 }
