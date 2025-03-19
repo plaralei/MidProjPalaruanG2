@@ -1,93 +1,131 @@
+/**
+ * Represents a CreditCardAccount, which extends the BankAccounts class.
+ * This class is used for handling credit card-specific operations such as making payments,
+ * charging purchases, inquiring available credit, and obtaining cash advances.
+ */
 public class CreditCardAccount extends BankAccounts {
 
     private double creditLimit;  // Credit limit for the card
     private double charges;      // Amount currently charged to the card
-    private double interestRate = 0.10; // Interest rate (e.g., 0.12 for 12% per year)
-    private double interestLimit = charges * 0.5; // Interest limit is 50% of current charges
-    private int timeCounter = 0; // Tracks how many times interest has been applied
 
+    /**
+     * Default constructor that initializes a new CreditCardAccount object with default values.
+     * The account number and account name are set by the superclass constructor.
+     */
     public CreditCardAccount() {
         super();
-        this.creditLimit = 0.0;
-        this.charges = 0.0;
     }
+
+    /**
+     * Initializes a CreditCardAccount with the specified account details.
+     *
+     * @param accountNo The account number for the credit card account.
+     * @param accountName The name of the account holder.
+     * @param creditLimit The credit limit for the credit card.
+     * @param charges The amount currently charged to the credit card.
+     */
 
     // Constructor to initialize the credit card account with given details
     public CreditCardAccount(int accountNo, String accountName, double creditLimit, double charges) {
+        super(accountNo,accountName);
         this.creditLimit = creditLimit;
+        this.charges = charges;
     }
 
-    // Getter method for the credit limit
+    /**
+     * Retrieves the credit limit of the credit card account.
+     *
+     * @return The credit limit of the card.
+     */
     public double getCreditLimit() {
         return creditLimit;
     }
 
-    // Getter method for the current charges on the card
+    /**
+     * Retrieves the current charges on the credit card account.
+     *
+     * @return The current charges on the card.
+     */
     public double getCharges() {
         return charges;
     }
 
-    // Apply interest after a set number of calls (simulating time passing)
-    public void applyInterest() {
-        timeCounter++; // Increment counter whenever method is called
+    /**
+     * Makes a payment towards the credit card, reducing the outstanding charges.
+     * If the payment exceeds the outstanding charges, the charges will be cleared.
+     *
+     * @param amount The amount to pay towards the credit card charges.
+     * @throws IllegalArgumentException if the payment amount is negative or zero.
+     */
+    public void payCard(double amount) throws IllegalArgumentException {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Invalid payment amount. Payment should be positive.");
+        }
 
-        if (timeCounter >= 12) { // Assuming interest is applied after 12 calls or "months"
-            double interest = charges * interestRate;
-            if (interest > interestLimit) {
-                interest = interestLimit; // Cap interest at limit
-            }
-            charges += interest;
-            timeCounter = 0; // Reset counter after applying interest
-            System.out.printf("Interest applied: " + interest + "\nNew charges: " + charges);
+        if (amount <= charges) {
+            charges -= amount;  // Deduct the payment from the outstanding charges
+            System.out.println("Payment successful. Remaining charges: " + charges);
         } else {
-            System.out.println("Interest not applied yet. # of calls until next increase: " + (12 - timeCounter));
+            charges = 0;  // If payment exceeds charges, clear the charges
+            System.out.println("Payment exceeded the charges. Charges cleared.");
         }
     }
 
-    // Method to make a payment towards the card, reducing the charges
-    public void payCard(double amount) {
-        if (amount > 0) {  // Payment amount must be positive
-            if (amount <= charges) {
-                charges -= amount;  // Deduct the payment from the outstanding charges
-                System.out.println("Payment successful. Remaining charges: " + charges);
-            } else {
-                charges = 0;  // If payment exceeds charges, clear the charges
-                System.out.println("Payment exceeded the charges. Charges cleared.");
-            }
-        } else {
-            System.out.println("Invalid payment amount. Payment should be positive.");
-        }
-    }
-
-    // Method to inquire about the available credit (credit limit - charges)
+    /**
+     * Inquires about the available credit on the credit card (credit limit minus current charges).
+     *
+     * @return The available credit, which is the credit limit minus the current charges.
+     */
     public void inquireAvailableCredit() {
-        double availableCredit = creditLimit - charges;  // Available credit is the credit limit minus current charges
-        System.out.println("Available Credit: " + availableCredit);
+        try {
+            double availableCredit = creditLimit - charges;  // Available credit is the credit limit minus current charges
+            System.out.println("Available Credit: " + availableCredit);
+        } catch (Exception e) {
+            System.out.println("An error occurred while inquiring about available credit: " + e.getMessage());
+        }
     }
 
-    // Method to charge an amount to the card, if there's enough available credit
-    public void chargeToCard(double amount) {
+    /**
+     * Charges an amount to the credit card, if there is enough available credit.
+     * If the available credit is insufficient, the charge will not be processed.
+     *
+     * @param amount The amount to charge to the credit card.
+     * @throws IllegalArgumentException if the charge amount is negative or exceeds available credit.
+     */
+    public void chargeToCard(double amount) throws IllegalArgumentException {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Charge amount must be positive.");
+        }
+
         double availableCredit = creditLimit - charges;  // Calculate available credit
 
         if (availableCredit >= amount) {
             charges += amount;  // Add the amount to charges if there's enough available credit
             System.out.println("Charge successful. New charges: " + charges);
         } else {
-            System.out.println("Insufficient available credit to charge this amount."); // Notify if insufficient credit
+            System.out.println("Insufficient available credit to charge this amount.");
         }
     }
 
-    // Method to get a cash advance, but it must be less than or equal to 50% of the available credit
-    public void getCashAdvance(double amount) {
+    /**
+     * Requests a cash advance on the credit card, but the cash advance must be less than or equal to 50% of the available credit.
+     * If the requested cash advance exceeds 50% of the available credit, the transaction is declined.
+     *
+     * @param amount The amount to request for the cash advance.
+     * @throws IllegalArgumentException if the cash advance amount exceeds 50% of available credit.
+     */
+    public void getCashAdvance(double amount) throws IllegalArgumentException {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Cash advance amount must be positive.");
+        }
+
         double availableCredit = creditLimit - charges;  // Calculate available credit
 
         if (amount <= (availableCredit * 0.5)) {  // Check if cash advance is within 50% of available credit
-
             charges += amount;  // Add the cash advance to charges
             System.out.println("Cash advance successful. New charges: " + charges);
-
         } else {
-            System.out.println("Cash advance exceeds 50% of available credit. Transaction declined.");  // Reject if too large
+            System.out.println("Cash advance exceeds 50% of available credit. Transaction declined.");
         }
     }
 }

@@ -1,17 +1,20 @@
-public class BankAccounts {
-    private int accountNo;          // 9-digit account number
-    private String accountName;
-    protected double balance;       // protected so it can be accessed in subclasses
-    protected String status;        // "active" or "closed"
+import java.util.Scanner;
 
-    // Constructors
+public class BankAccounts {
+    private int accountNo;
+    private String accountName;
+    protected double balance;
+    protected String status;
+    protected String password;
+
+
     public BankAccounts() {
         this.status = "active";
         this.balance = 0;
     }
 
     public BankAccounts(int accountNo, String accountName) {
-        this(); // Call default constructor
+        this();
         if (String.valueOf(accountNo).length() == 9) {
             this.accountNo = accountNo;
         } else {
@@ -20,7 +23,19 @@ public class BankAccounts {
         this.accountName = accountName;
     }
 
-    // Getter and Setter methods
+    public boolean authenticate(String password) {
+        return this.password.equals(password);
+    }
+
+    public void displayInfo() {
+        System.out.println("\nAccount Info:");
+        System.out.println("Account No: " + accountNo);
+        System.out.println("Account Name: " + accountName);
+        System.out.println("Balance: " + balance);
+        System.out.println("Status: Active\n");
+    }
+
+
     public int getAccountNo() {
         return accountNo;
     }
@@ -49,7 +64,7 @@ public class BankAccounts {
         }
     }
 
-    // Deposit method with exception handling
+
     public void deposit(double amount) {
         try {
             if (amount > 0) {
@@ -63,7 +78,7 @@ public class BankAccounts {
         }
     }
 
-    // Withdraw method with exception handling
+
     public void withdraw(double amount) {
         try {
             if (balance >= amount) {
@@ -81,12 +96,12 @@ public class BankAccounts {
         }
     }
 
-    // Balance inquiry
+
     public double inquireBalance() {
         return balance;
     }
 
-    // Close account with exception handling
+
     public void closeAccount() {
         try {
             if (balance == 0) {
@@ -100,7 +115,7 @@ public class BankAccounts {
         }
     }
 
-    // Transfer money with exception handling
+
     public void transferMoney(BankAccounts targetAccount, double amount) {
         try {
             if (targetAccount == null) {
