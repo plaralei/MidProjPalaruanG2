@@ -11,11 +11,14 @@ public class AccountsMain {
     public static void main(String[] args) {
         boolean isLoggedIn = false;
 
+        System.out.println("Welcome to SLU's Computer Scienc Banking System!!");
+        System.out.println("Please select an option\n");
+
         while (!isLoggedIn) {
             try {
                 System.out.println("1. Create Account");
                 System.out.println("2. Log In");
-                System.out.println("3. Exit");
+                System.out.println("3. Exit\n");
                 System.out.print("Enter your choice: ");
 
                 int choice = sc.nextInt();
@@ -52,7 +55,7 @@ public class AccountsMain {
                 System.out.println("7. Transfer Money");
                 System.out.println("8. Account Information");
                 System.out.println("9. Close Account");
-                System.out.println("0. Exit");
+                System.out.println("0. Exit\n");
                 System.out.print("Enter your choice: ");
 
                 choice = sc.nextInt();
@@ -111,7 +114,7 @@ public class AccountsMain {
                 System.out.println("Account not found. Please check the account number.");
                 return;
             }
-            System.out.print("Enter Amount: ");
+            System.out.print("Enter Amount:\n");
             double amount = validatePositiveDouble(); // Ensure positive input
 
         } catch (InputMismatchException e) {
@@ -127,7 +130,7 @@ public class AccountsMain {
         try {
             String fullName = "";
             while (fullName.isEmpty()) {
-                System.out.print("Enter Full Name: ");
+                System.out.print("\nEnter Full Name: ");
                 fullName = sc.nextLine().trim();
                 if (!fullName.matches("[a-zA-Z ]+")) {
                     System.out.println("Invalid name! Please enter only letters and spaces.");
@@ -145,11 +148,11 @@ public class AccountsMain {
                 }
             }
             // Display success message
-            System.out.println("Account created successfully!");
+            System.out.println("\nAccount created successfully!");
             System.out.println("Account Info:");
             System.out.println("Full Name: " + fullName);
             int accountNo = generateUniqueAccountNumber();
-            System.out.println("Generated Account Number: " + accountNo);
+            System.out.println("Generated Account Number: " + accountNo + "\n");
 
             userAccounts.put(fullName.toLowerCase(), password); // Store name in lowercase for case-insensitive login
             bankAccountsMap.put(accountNo, new BankAccounts(accountNo, fullName));
@@ -189,8 +192,9 @@ public class AccountsMain {
         System.out.println("Generated Account Number: " + accountNo);
         System.out.print("Enter Account Name: ");
         String accountName = sc.nextLine();
-        System.out.print("Enter Credit Limit: ");
-        double creditLimit = validatePositiveDouble();
+        double creditLimit = 50000;
+        System.out.print("Credit Limit: " + creditLimit);
+        creditLimit = validatePositiveDouble();
         bankAccountsMap.put(accountNo, new CreditCardAccount(accountNo, accountName, creditLimit, 0));
         System.out.println("Credit Card Account Created Successfully!");
     }
@@ -200,9 +204,10 @@ public class AccountsMain {
         System.out.println("Generated Account Number: " + accountNo);
         System.out.print("Enter Account Name: ");
         String accountName = sc.nextLine();
-        System.out.print("Enter Minimum Balance: ");
-        double minBalance = validatePositiveDouble();
-        bankAccountsMap.put(accountNo, new CheckingAccount(accountNo, accountName, minBalance));
+        Double minimumBalance = null;
+        System.out.println("Minimum balance: " + minimumBalance);
+        minimumBalance = sc.nextDouble();
+        bankAccountsMap.put(accountNo, new CheckingAccount(accountNo, accountName, minimumBalance));
         System.out.println("Checking Account Created Successfully!");
     }
 

@@ -5,16 +5,8 @@
  */
 public class CreditCardAccount extends BankAccounts {
 
-    private double creditLimit;  // Credit limit for the card
-    private double charges;      // Amount currently charged to the card
-
-    /**
-     * Default constructor that initializes a new CreditCardAccount object with default values.
-     * The account number and account name are set by the superclass constructor.
-     */
-    public CreditCardAccount() {
-        super();
-    }
+    private double creditLimit = 50000;
+    private double charges = 0.5;
 
     /**
      * Initializes a CreditCardAccount with the specified account details.

@@ -5,7 +5,7 @@
  * @version 1.0
  */
 public class CheckingAccount extends BankAccounts {
-    private double minimumBalance;
+    private double minimumBalance = 5000;
 
     /**
      * Constructor to initialize a CheckingAccount with the given details.
