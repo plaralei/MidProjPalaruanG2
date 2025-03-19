@@ -1,5 +1,3 @@
-import java.util.Scanner;
-
 public class BankAccounts {
     private int accountNo;
     private String accountName;
