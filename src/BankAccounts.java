@@ -129,7 +129,6 @@ public class BankAccounts {
             System.out.println(e.getMessage());
         }
     }
-
     /**
      * Withdraws a specified amount from the account.
      *
