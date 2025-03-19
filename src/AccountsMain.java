@@ -1,14 +1,15 @@
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class AccountsMain extends BankAccounts{
+public class AccountsMain {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
         // Array to store all the 3 types of accounts
-        BankAccounts[] bankAccounts = new BankAccounts[50];
+        BankAccounts[] bankAccounts = new BankAccounts[5];
         int accountCount = 0;
 
+        // Menu options
         int choice = -1;
         while (choice != 0) {
             System.out.println("1. Create Bank Account");
@@ -42,7 +43,6 @@ public class AccountsMain extends BankAccounts{
 
                                     if (type < 1 || type > 3) {
                                         System.out.println("Invalid option. Please enter a number between 1 and 3.");
-
                                     }
                                 } catch (InputMismatchException e) {
 
@@ -51,11 +51,10 @@ public class AccountsMain extends BankAccounts{
                                 }
                             } while (type < 1 || type > 3);
 
-                            System.out.print("Enter Account Number: ");
-                            int accountNo = sc.nextInt();
+
+                            int accountNo = readAccountNo();
                             sc.nextLine();
-                            System.out.print("Enter Account Holder Name: ");
-                            String accountName = sc.nextLine();
+                            String accountName = readAccountName();
 
                             switch (type) {
                                 case 1:
@@ -74,18 +73,9 @@ public class AccountsMain extends BankAccounts{
                                     break;
 
                                 case 2:
-                                    boolean validCaseTwo = false;
-                                    while(!validCaseTwo) {
-                                        try {
-                                            System.out.print("Enter Credit Limit: ");
-                                            double creditLimit = sc.nextDouble();
-                                            bankAccounts[accountCount] = new CreditCardAccount(accountNo, accountName, creditLimit, 0);
-                                            validCaseTwo = true;
-                                        } catch (InputMismatchException e ) {
-                                            System.out.println("Invalid Input! Please enter valid numbers.");
-                                            sc.nextLine();
-                                        }
-                                    }
+                                    System.out.print("Enter Credit Limit: ");
+                                    double creditLimit = sc.nextDouble();
+                                    bankAccounts[accountCount] = new CreditCardAccount(accountNo, accountName, creditLimit, 0);
                                     break;
 
                                 case 3:
@@ -122,8 +112,6 @@ public class AccountsMain extends BankAccounts{
                         BankAccounts acc = findAccount(bankAccounts, accountNo);
                         if (acc instanceof InvestmentAccount) {
                             System.out.println("Investment Value (including interest): " + ((InvestmentAccount) acc).inquireInvestmentValue());
-                        }else if (acc instanceof CreditCardAccount) {
-//                            System.out.println("Credit Card" + ((CreditCardAccount) acc).inquireAvailableCredit());
                         } else if (acc != null) {
                             System.out.println("Balance: " + acc.inquireBalance());
                         } else {
@@ -155,7 +143,6 @@ public class AccountsMain extends BankAccounts{
                         }
                         break;
                     case 5:
-                        System.out.println("");
                         System.out.print("Enter Your Account Number: ");
                         int fromAccNum = sc.nextInt();
                         BankAccounts fromAcc = findAccount(bankAccounts, fromAccNum);
@@ -219,12 +206,55 @@ public class AccountsMain extends BankAccounts{
     }
 
     // Method to find an account by number
-    private static BankAccounts findAccount(BankAccounts[] bankAccounts, int accountNo) {
-        for (BankAccounts account : bankAccounts) {
+    private static BankAccounts findAccount(BankAccounts[] accounts, int accountNo) {
+        for (BankAccounts account : accounts) {
             if (account != null && account.getAccountNo() == accountNo) {
                 return account;
             }
         }
         return null;
+    }
+
+    public static int readAccountNo() {
+        Scanner sc = new Scanner(System.in);
+        boolean validNo = false;
+        int accountNo = 0;
+
+        while (!validNo) {
+            try {
+                System.out.print("Enter Account Number: ");
+                String input = sc.nextLine();
+                if (input.matches("\\d{9}")) {
+                    accountNo = Integer.parseInt(input);
+                    validNo = true;
+                } else {
+                    System.out.println("Invalid input! Please enter exactly 9 digits.");
+                }
+            } catch (Exception e) {
+                System.out.println("An unexpected error occurred.");
+                sc.nextLine();
+            }
+        }
+        return accountNo;
+    }
+
+    public static String readAccountName() {
+        Scanner sc = new Scanner(System.in);
+        boolean validName = false;
+        String accountName = "";
+
+        while (!validName) {
+            try {
+                System.out.print("Enter Account Holder Name: ");
+                accountName = sc.nextLine();
+                Integer.parseInt(accountName);
+                System.out.println("Invalid input! Please enter string only.");
+            } catch (NumberFormatException e) {
+                validName = true;
+            } catch (Exception e) {
+                System.out.println("An unexpected error occurred.");
+            }
+        }
+        return accountName;
     }
 }
