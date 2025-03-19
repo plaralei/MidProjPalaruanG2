@@ -56,18 +56,19 @@ public class CreditCardAccount extends BankAccounts {
      * If the payment exceeds the outstanding charges, the charges will be cleared.
      *
      * @param amount The amount to pay towards the credit card charges.
+     * @throws IllegalArgumentException if the payment amount is negative or zero.
      */
-    public void payCard(double amount) {
-        if (amount > 0) {  // Payment amount must be positive
-            if (amount <= charges) {
-                charges -= amount;  // Deduct the payment from the outstanding charges
-                System.out.println("Payment successful. Remaining charges: " + charges);
-            } else {
-                charges = 0;  // If payment exceeds charges, clear the charges
-                System.out.println("Payment exceeded the charges. Charges cleared.");
-            }
+    public void payCard(double amount) throws IllegalArgumentException {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Invalid payment amount. Payment should be positive.");
+        }
+
+        if (amount <= charges) {
+            charges -= amount;  // Deduct the payment from the outstanding charges
+            System.out.println("Payment successful. Remaining charges: " + charges);
         } else {
-            System.out.println("Invalid payment amount. Payment should be positive.");
+            charges = 0;  // If payment exceeds charges, clear the charges
+            System.out.println("Payment exceeded the charges. Charges cleared.");
         }
     }
 
@@ -77,8 +78,12 @@ public class CreditCardAccount extends BankAccounts {
      * @return The available credit, which is the credit limit minus the current charges.
      */
     public void inquireAvailableCredit() {
-        double availableCredit = creditLimit - charges;  // Available credit is the credit limit minus current charges
-        System.out.println("Available Credit: " + availableCredit);
+        try {
+            double availableCredit = creditLimit - charges;  // Available credit is the credit limit minus current charges
+            System.out.println("Available Credit: " + availableCredit);
+        } catch (Exception e) {
+            System.out.println("An error occurred while inquiring about available credit: " + e.getMessage());
+        }
     }
 
     /**
@@ -86,15 +91,20 @@ public class CreditCardAccount extends BankAccounts {
      * If the available credit is insufficient, the charge will not be processed.
      *
      * @param amount The amount to charge to the credit card.
+     * @throws IllegalArgumentException if the charge amount is negative or exceeds available credit.
      */
-    public void chargeToCard(double amount) {
+    public void chargeToCard(double amount) throws IllegalArgumentException {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Charge amount must be positive.");
+        }
+
         double availableCredit = creditLimit - charges;  // Calculate available credit
 
         if (availableCredit >= amount) {
             charges += amount;  // Add the amount to charges if there's enough available credit
             System.out.println("Charge successful. New charges: " + charges);
         } else {
-            System.out.println("Insufficient available credit to charge this amount."); // Notify if insufficient credit
+            System.out.println("Insufficient available credit to charge this amount.");
         }
     }
 
@@ -103,17 +113,20 @@ public class CreditCardAccount extends BankAccounts {
      * If the requested cash advance exceeds 50% of the available credit, the transaction is declined.
      *
      * @param amount The amount to request for the cash advance.
+     * @throws IllegalArgumentException if the cash advance amount exceeds 50% of available credit.
      */
-    public void getCashAdvance(double amount) {
+    public void getCashAdvance(double amount) throws IllegalArgumentException {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Cash advance amount must be positive.");
+        }
+
         double availableCredit = creditLimit - charges;  // Calculate available credit
 
         if (amount <= (availableCredit * 0.5)) {  // Check if cash advance is within 50% of available credit
-
             charges += amount;  // Add the cash advance to charges
             System.out.println("Cash advance successful. New charges: " + charges);
-
         } else {
-            System.out.println("Cash advance exceeds 50% of available credit. Transaction declined.");  // Reject if too large
+            System.out.println("Cash advance exceeds 50% of available credit. Transaction declined.");
         }
     }
 }
