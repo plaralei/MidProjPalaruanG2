@@ -30,15 +30,16 @@ public class InvestmentAccount extends BankAccounts {
         return balance * (1 + INTEREST_RATE);
     }
 
-    // Close Account
+    @Override
     public void closeAccount() {
+        double totalBalance = inquireInvestmentValue();
+        System.out.println("Withdrawing Final Balance (with interest): " + totalBalance);
         if (balance > 0) {
-            double finalBalance = inquireInvestmentValue();
-            System.out.println("Withdrawing final balance: " + finalBalance);
             balance = 0;
+            super.closeAccount();
+        } else {
+            System.out.println("Account already empty.");
         }
-        System.out.println("Account closed successfully.");
-        this.status = "Closed";
     }
 
     // Preventing withdrawals and transfers
