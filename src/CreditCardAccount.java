@@ -50,7 +50,6 @@ public class CreditCardAccount extends BankAccounts {
         return charges;
     }
 
-
     /**
      * Makes a payment towards the credit card, reducing the outstanding charges.
      * If the payment exceeds the outstanding charges, the charges will be cleared.
