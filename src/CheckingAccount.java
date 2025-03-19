@@ -29,14 +29,6 @@ public class CheckingAccount extends BankAccounts {
         this.minimumBalance = minimumBalance;
     }
 
-    /**
-     * Shows the minimum balance of an accessed account
-     *
-     * @return minimumBalance
-     */
-    public double getMinimumBalance() {
-        return minimumBalance;
-    }
 
     /**
      *Encashes a check/exchanges a written check for cash
