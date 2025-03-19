@@ -3,6 +3,7 @@ public class BankAccounts {
     private String accountName;
     protected double balance;       // protected so it can be accessed in subclasses
     protected String status;        // "active" or "closed"
+    protected String password;
 
     // Constructors
     public BankAccounts() {
@@ -18,6 +19,18 @@ public class BankAccounts {
             throw new IllegalArgumentException("Account number must be 9 digits.");
         }
         this.accountName = accountName;
+    }
+
+    public boolean authenticate(String password) {
+        return this.password.equals(password);
+    }
+
+    public void displayInfo() {
+        System.out.println("\nAccount Info:");
+        System.out.println("Account No: " + accountNo);
+        System.out.println("Account Name: " + accountName);
+        System.out.println("Balance: " + balance);
+        System.out.println("Status: Active\n");
     }
 
     // Getter and Setter methods
