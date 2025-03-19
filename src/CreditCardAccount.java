@@ -46,7 +46,7 @@ public class CreditCardAccount extends BankAccounts {
         System.out.println("Available credit: " + availableCredit);
     }
 
-    // Method to charge an amount to the card, if there's enough available credit
+    // Method to charge an amount to the card, if there's enough available credit.
 
     public void chargeToCard(double amount) {
         double availableCredit = creditLimit - charges; // Calculate available credit
