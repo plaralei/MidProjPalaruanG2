@@ -6,8 +6,8 @@
  */
 
 public class InvestmentAccount extends BankAccounts {
-    private static final double minimumBalance = 1000.00;
-    private static final double interest = 0.05;
+    private double minimumBalance = 1000.00;
+    private double interest = 0.05;
 
     /**
      * Creates an InvestmentAccount with a default minimum balance.
