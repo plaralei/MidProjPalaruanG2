@@ -2,7 +2,7 @@ public class InvestmentAccount extends BankAccounts {
     private double minimumBalance;
     private double interest;
 
-    // Constructors
+
     public InvestmentAccount() {
         super();
         this.minimumBalance = 0;
