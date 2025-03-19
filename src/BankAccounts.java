@@ -35,13 +35,25 @@ public class BankAccounts {
         this.accountName = accountName;
     }
 
+    public BankAccounts(int accountNo, String accountName, String password, double balance) {
+        this(); // Call default constructor to initialize status and balance
+        if (String.valueOf(accountNo).length() == 9) {
+            this.accountNo = accountNo;
+        } else {
+            throw new IllegalArgumentException("Account number must be 9 digits.");
+        }
+        this.accountName = accountName;
+        this.password = password; // Set the password
+        this.balance = balance; // Set the balance if provided
+    }
+
     /**
-     * Authenticates the user by checking the provided password.
+     * Verifies the user password.
      *
      * @param password The password to be verified.
      * @return True if the password matches, otherwise false.
      */
-    public boolean authenticate(String password) {
+    public boolean verifyPassword(String password) {
         return this.password.equals(password);
     }
 

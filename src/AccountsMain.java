@@ -1,7 +1,7 @@
 import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import java.util.Random;
+
 
 public class AccountsMain {
     static HashMap<String, String> userAccounts = new HashMap<>();
@@ -105,12 +105,6 @@ public class AccountsMain {
         } while (choice != 0);
     }
 
-    // Method to generate a 9-digit account number
-    public static int generateAccountNo() {
-        Random random = new Random();
-        // Ensure it's a 9-digit number
-        return 100000000 + random.nextInt(900000000);
-    }
 
     public static void createAccount() {
         System.out.print("Enter Full Name: ");
