@@ -1,15 +1,19 @@
 import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.Random;
 
 
 public class AccountsMain {
     static HashMap<String, String> userAccounts = new HashMap<>();
     static HashMap<Integer, BankAccounts> bankAccountsMap = new HashMap<>();
-    static Scanner sc = new Scanner(System.in);
+    static Scanner sc = new Scanner(System.in);;
 
     public static void main(String[] args) {
         boolean isLoggedIn = false;
+
+        int accountNumber = generateAccountNumber();
+        System.out.println("Generated Account Number: " + accountNumber);
 
         while (!isLoggedIn) {
             System.out.println("1. Create Account");
@@ -107,35 +111,47 @@ public class AccountsMain {
 
 
     public static void createAccount() {
-        System.out.print("Enter Full Name: ");
-        String fullName = sc.nextLine();
-
-        String password;
-        while (true) {
-            System.out.print("Enter a 6-digit PIN for your password: ");
-            password = sc.nextLine();
-            if (password.matches("\\d{6}")) {
-                break;
-            } else {
-                System.out.println("Invalid PIN! Please enter a 6-digit number.");
+        try {
+            String fullName;
+            while (true) {
+                System.out.print("Enter Full Name: ");
+                fullName = sc.nextLine();
+                if (fullName.matches("[a-zA-Z ]+")) {
+                    break;
+                } else {
+                    System.out.println("Invalid name! Please enter only letters and spaces.");
+                }
             }
-        }
 
-        userAccounts.put(fullName, password);
-        System.out.println("Account created successfully!");
+            String password;
+            while (true) {
+                System.out.print("Enter a 6-digit PIN: ");
+                password = sc.nextLine();
+                if (password.matches("\\d{6}")) {
+                    break;
+                } else {
+                    System.out.println("Invalid PIN! Enter a 6-digit number.");
+                }
+            }
+
+            userAccounts.put(fullName.toLowerCase(), password); // Store name in lowercase for case-insensitive login
+            System.out.println("Account created successfully!");
+        } catch (Exception e) {
+            System.out.println("Error creating account: " + e.getMessage());
+        }
     }
 
     public static boolean login() {
         System.out.print("Enter Full name: ");
-        String Fullname = sc.nextLine();
+        String fullName = sc.nextLine().toLowerCase(); // Convert to lowercase
         System.out.print("Enter PIN (6 digit): ");
         String password = sc.nextLine();
 
-        if (userAccounts.containsKey(Fullname) && userAccounts.get(Fullname).equals(password)) {
+        if (userAccounts.containsKey(fullName) && userAccounts.get(fullName).equals(password)) {
             System.out.println("Login successful!");
             return true;
         } else {
-            System.out.println("Invalid username/password or account doesn't exist.");
+            System.out.println("Invalid name/PIN or account doesn't exist.");
             return false;
         }
     }
@@ -233,6 +249,12 @@ public class AccountsMain {
         } else {
             System.out.println("Account not found.");
         }
+    }
+
+    public static int generateAccountNumber() {
+        Random rand = new Random();
+        // Generate a 9-digit number (100000000 to 999999999)
+        return 100000000 + rand.nextInt(900000000);
     }
 
     public static void closeAccount() {
