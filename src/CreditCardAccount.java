@@ -2,15 +2,19 @@ public class CreditCardAccount extends BankAccounts {
 
     private double creditLimit;  // Credit limit for the card
     private double charges;      // Amount currently charged to the card
+    private double interestRate = 0.10; // Interest rate (e.g., 0.12 for 12% per year)
+    private double interestLimit = charges * 0.5; // Interest limit is 50% of current charges
+    private int timeCounter = 0; // Tracks how many times interest has been applied
 
     public CreditCardAccount() {
         super();
+        this.creditLimit = 0.0;
+        this.charges = 0.0;
     }
 
     // Constructor to initialize the credit card account with given details
     public CreditCardAccount(int accountNo, String accountName, double creditLimit, double charges) {
         this.creditLimit = creditLimit;
-        this.charges = charges;
     }
 
     // Getter method for the credit limit
@@ -23,6 +27,22 @@ public class CreditCardAccount extends BankAccounts {
         return charges;
     }
 
+    // Apply interest after a set number of calls (simulating time passing)
+    public void applyInterest() {
+        timeCounter++; // Increment counter whenever method is called
+
+        if (timeCounter >= 12) { // Assuming interest is applied after 12 calls or "months"
+            double interest = charges * interestRate;
+            if (interest > interestLimit) {
+                interest = interestLimit; // Cap interest at limit
+            }
+            charges += interest;
+            timeCounter = 0; // Reset counter after applying interest
+            System.out.printf("Interest applied: " + interest + "\nNew charges: " + charges);
+        } else {
+            System.out.println("Interest not applied yet. # of calls until next increase: " + (12 - timeCounter));
+        }
+    }
 
     // Method to make a payment towards the card, reducing the charges
     public void payCard(double amount) {
