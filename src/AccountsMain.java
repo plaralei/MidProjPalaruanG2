@@ -1,15 +1,14 @@
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class AccountsMain {
+public class AccountsMain extends BankAccounts{
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
         // Array to store all the 3 types of accounts
-        BankAccounts[] bankAccounts = new BankAccounts[5];
+        BankAccounts[] bankAccounts = new BankAccounts[50];
         int accountCount = 0;
 
-        // Menu options
         int choice = -1;
         while (choice != 0) {
             System.out.println("1. Create Bank Account");
@@ -43,6 +42,7 @@ public class AccountsMain {
 
                                     if (type < 1 || type > 3) {
                                         System.out.println("Invalid option. Please enter a number between 1 and 3.");
+
                                     }
                                 } catch (InputMismatchException e) {
 
@@ -74,9 +74,18 @@ public class AccountsMain {
                                     break;
 
                                 case 2:
-                                    System.out.print("Enter Credit Limit: ");
-                                    double creditLimit = sc.nextDouble();
-                                    bankAccounts[accountCount] = new CreditCardAccount(accountNo, accountName, creditLimit, 0);
+                                    boolean validCaseTwo = false;
+                                    while(!validCaseTwo) {
+                                        try {
+                                            System.out.print("Enter Credit Limit: ");
+                                            double creditLimit = sc.nextDouble();
+                                            bankAccounts[accountCount] = new CreditCardAccount(accountNo, accountName, creditLimit, 0);
+                                            validCaseTwo = true;
+                                        } catch (InputMismatchException e ) {
+                                            System.out.println("Invalid Input! Please enter valid numbers.");
+                                            sc.nextLine();
+                                        }
+                                    }
                                     break;
 
                                 case 3:
@@ -113,6 +122,8 @@ public class AccountsMain {
                         BankAccounts acc = findAccount(bankAccounts, accountNo);
                         if (acc instanceof InvestmentAccount) {
                             System.out.println("Investment Value (including interest): " + ((InvestmentAccount) acc).inquireInvestmentValue());
+                        }else if (acc instanceof CreditCardAccount) {
+//                            System.out.println("Credit Card" + ((CreditCardAccount) acc).inquireAvailableCredit());
                         } else if (acc != null) {
                             System.out.println("Balance: " + acc.inquireBalance());
                         } else {
@@ -144,6 +155,7 @@ public class AccountsMain {
                         }
                         break;
                     case 5:
+                        System.out.println("");
                         System.out.print("Enter Your Account Number: ");
                         int fromAccNum = sc.nextInt();
                         BankAccounts fromAcc = findAccount(bankAccounts, fromAccNum);
@@ -207,8 +219,8 @@ public class AccountsMain {
     }
 
     // Method to find an account by number
-    private static BankAccounts findAccount(BankAccounts[] accounts, int accountNo) {
-        for (BankAccounts account : accounts) {
+    private static BankAccounts findAccount(BankAccounts[] bankAccounts, int accountNo) {
+        for (BankAccounts account : bankAccounts) {
             if (account != null && account.getAccountNo() == accountNo) {
                 return account;
             }
