@@ -15,29 +15,37 @@ public class AccountsMain {
 
         // Menu for user to see general info, log in, create an account, or exit
         while (!isLoggedIn) {
-            System.out.println("1. " + (accountCreated ? "Create Another Account" : "Create Account"));
-            System.out.println("2. General Info");
-            System.out.println("3. Log In");
-            System.out.println("4. Exit");
-            System.out.print("Enter your choice: ");
-            int choice = sc.nextInt();
-            sc.nextLine(); // Consume newline
 
-            switch (choice) {
-                case 1:
-                    createAccount();
-                    break;
-                case 2:
-                    displayGeneralInformation();
-                    break;
-                case 3:
-                    isLoggedIn = login();
-                    break;
-                case 4:
-                    System.out.println("Exiting...");
-                    return;
-                default:
-                    System.out.println("Invalid choice.");
+            try {
+                System.out.println("1. " + (accountCreated ? "Create Another Account" : "Create Account"));
+                System.out.println("2. General Info");
+                System.out.println("3. Log In");
+                System.out.println("4. Exit");
+                System.out.print("Enter your choice: ");
+                int choice = sc.nextInt();
+                sc.nextLine(); // Consume newline
+
+                switch (choice) {
+                    case 1:
+                        createAccount();
+                        break;
+                    case 2:
+                        displayGeneralInformation();
+                        break;
+                    case 3:
+                        isLoggedIn = login();
+                        break;
+                    case 4:
+                        System.out.println("Exiting...");
+                        return;
+                    default:
+                        System.out.println("Invalid choice.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input! Please enter a valid number.");
+                sc.nextLine();
+            } catch (Exception e) {
+                System.out.println("An unexpected error occurred: " + e.getMessage());
             }
         }
 
