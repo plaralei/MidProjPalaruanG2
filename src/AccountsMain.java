@@ -50,30 +50,52 @@ public class AccountsMain {
                                     sc.nextLine();
                                 }
                             } while (type < 1 || type > 3);
-                            System.out.print("Enter Account Number: ");
-                            int accountNo = sc.nextInt();
+
+
+                            int accountNo = readAccountNo();
                             sc.nextLine();
-                            System.out.print("Enter Account Holder Name: ");
-                            String accountName = sc.nextLine();
+                            String accountName = readAccountName();
 
                             switch (type) {
-//                            case 1:
-//                                System.out.print("Enter Minimum Balance: ");
-//                                double minBal = sc.nextDouble();
-//                                bankAccounts[accountCount] = new CheckingAccount(accountNo, accountName, minBal);
-//                                break;
-//                            case 2:
-//                                System.out.print("Enter Credit Limit: ");
-//                                double creditLimit = sc.nextDouble();
-//                                bankAccounts[accountCount] = new CreditCardAccount(accountNo, accountName, creditLimit, 0);
-//                                break;
-                                case 3:
-                                    System.out.print("Enter Minimum Balance: ");
-                                    double minInvestment = sc.nextDouble();
-                                    System.out.print("Enter Interest Rate: ");
-                                    double interest = sc.nextDouble();
-                                    bankAccounts[accountCount] = new InvestmentAccount(accountNo, accountName, minInvestment, interest);
+                                case 1:
+                                    boolean validCaseOne = false;
+                                    while (!validCaseOne) {
+                                        try {
+                                            System.out.print("Enter Minimum Balance: ");
+                                            double minBal = sc.nextDouble();
+                                            bankAccounts[accountCount] = new CheckingAccount(accountNo, accountName, minBal);
+                                            validCaseOne = true;
+                                        } catch (InputMismatchException e) {
+                                            System.out.println("Invalid Input! Please enter valid numbers.");
+                                            sc.nextLine();
+                                        }
+                                    }
                                     break;
+
+                                case 2:
+                                    System.out.print("Enter Credit Limit: ");
+                                    double creditLimit = sc.nextDouble();
+                                    bankAccounts[accountCount] = new CreditCardAccount(accountNo, accountName, creditLimit, 0);
+                                    break;
+
+                                case 3:
+                                    boolean validCaseThree = false;
+                                    while (!validCaseThree) {
+                                        try {
+                                            System.out.print("Enter Minimum Balance: ");
+                                            double minInvestment = sc.nextDouble();
+                                            System.out.print("Enter Interest Rate: ");
+                                            double interest = sc.nextDouble();
+
+                                            bankAccounts[accountCount] = new InvestmentAccount(accountNo, accountName, minInvestment, interest);
+                                            validCaseThree = true;
+                                        } catch (InputMismatchException e) {
+                                            System.out.println("Invalid Input! Please enter valid numbers.");
+                                            sc.nextLine();
+                                        }
+                                    }
+                                    break;
+
                                 default:
                                     System.out.println("Invalid account type.");
                                     continue;
@@ -173,7 +195,7 @@ public class AccountsMain {
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Please enter a valid number.");
-                sc.nextLine(); // consume the invalid input
+                sc.nextLine();
             } catch (Exception e) {
                 System.out.println("An unexpected error occurred: " + e.getMessage());
                 // I worked
@@ -191,5 +213,48 @@ public class AccountsMain {
             }
         }
         return null;
+    }
+
+    public static int readAccountNo() {
+        Scanner sc = new Scanner(System.in);
+        boolean validNo = false;
+        int accountNo = 0;
+
+        while (!validNo) {
+            try {
+                System.out.print("Enter Account Number: ");
+                String input = sc.nextLine();
+                if (input.matches("\\d{9}")) {
+                    accountNo = Integer.parseInt(input);
+                    validNo = true;
+                } else {
+                    System.out.println("Invalid input! Please enter exactly 9 digits.");
+                }
+            } catch (Exception e) {
+                System.out.println("An unexpected error occurred.");
+                sc.nextLine();
+            }
+        }
+        return accountNo;
+    }
+
+    public static String readAccountName() {
+        Scanner sc = new Scanner(System.in);
+        boolean validName = false;
+        String accountName = "";
+
+        while (!validName) {
+            try {
+                System.out.print("Enter Account Holder Name: ");
+                accountName = sc.nextLine();
+                Integer.parseInt(accountName);
+                System.out.println("Invalid input! Please enter string only.");
+            } catch (NumberFormatException e) {
+                validName = true;
+            } catch (Exception e) {
+                System.out.println("An unexpected error occurred.");
+            }
+        }
+        return accountName;
     }
 }
